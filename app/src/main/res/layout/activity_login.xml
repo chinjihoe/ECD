@@ -3,43 +3,51 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:weightSum="1">
-
-    <TextView
-        android:layout_width="115dp"
+    <LinearLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Login Screen"
-        android:id="@+id/loginText"
-        android:layout_weight="0.12" />
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:orientation="vertical"
+        android:gravity="center_vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Username"
-        android:id="@+id/Username_textfield"
-        android:layout_gravity="center_horizontal"
-        android:layout_weight="0.05" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Username"
+            android:id="@+id/usernametextfield"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="10dp"/>
 
-    <EditText
-        android:layout_width="289dp"
-        android:layout_height="67dp"
-        android:id="@+id/editText"
-        android:layout_gravity="center_horizontal" />
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/editText"
+            android:inputType="textEmailAddress"
+            android:layout_gravity="center_horizontal"
+            android:hint="Fill in your username!"
+            android:maxLines="1"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Password"
-        android:id="@+id/passwordField"
-        android:layout_gravity="center_horizontal"
-        android:layout_weight="0.03" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Password"
+            android:id="@+id/passwordField"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="10dp"/>
 
-    <EditText
-        android:layout_width="295dp"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:ems="10"
-        android:id="@+id/editText2"
-        android:layout_gravity="center_horizontal" />
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:ems="10"
+            android:id="@+id/editText2"
+            android:layout_gravity="center_horizontal"
+            android:hint="Fill in your password!"/>
+    </LinearLayout>
+
+
 </LinearLayout>
