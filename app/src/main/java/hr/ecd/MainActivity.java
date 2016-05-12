@@ -7,6 +7,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+/*
+    De activity die gebeurd aan het begin van de app
+ */
+
 public class MainActivity extends AppCompatActivity {
 
     @Override

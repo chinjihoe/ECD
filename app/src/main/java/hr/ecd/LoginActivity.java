@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 
 /**
- * Created by Boris_000 on 12-5-2016.
+ De login activity
  */
 public class LoginActivity extends Activity {
     @Override

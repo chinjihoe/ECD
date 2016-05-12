@@ -3,7 +3,8 @@ package hr.ecd;
 import android.app.Application;
 
 /**
- * Created by Boris_000 on 12-5-2016.
+ Class file om alle variabelen in op te slaan.
+ Bijv. tokens.
  */
 public class ECD_Application extends Application {
 
