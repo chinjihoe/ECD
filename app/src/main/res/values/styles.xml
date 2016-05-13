@@ -1,29 +1,47 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimaryDark">@color/Black</item>
         <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="icon">@mipmap/hp_icon</item>
+        <item name="displayOptions">showTitle|showHome</item>
     </style>
 
-    <style name="AppTheme.CustomTheme">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/Black</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="icon">@mipmap/hp_icon</item>
+        <item name="displayOptions">showTitle|showHome</item>
+    </style>
+
+    <style name="PopupTheme">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowCloseOnTouchOutside">true</item>
         <item name="android:backgroundDimEnabled">true</item>
     </style>
-s
+
     <style name="Divider">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1dp</item>
         <item name="android:background">?android:attr/listDivider</item>
     </style>
 
+    <style name="Bar">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:background">?android:attr/listDivider</item>
+    </style>
+
     <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowBackground">@drawable/background_splash</item>
     </style>
-
 
 
 </resources>

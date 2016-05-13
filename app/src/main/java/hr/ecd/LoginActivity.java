@@ -3,17 +3,22 @@ package hr.ecd;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 
 /**
  De login activity
  */
-public class LoginActivity extends Activity {
+public class LoginActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
+
+        Toolbar toolbar=(Toolbar)findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         final Button loginButton = (Button) findViewById(R.id.loginButton); //als login succesvol is, moet het doorgaan naar de volgende page.
         loginButton.setOnClickListener(new View.OnClickListener() {

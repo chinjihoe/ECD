@@ -20,8 +20,8 @@
         </activity>
         <activity android:name=".MainActivity"/>
         <activity android:name=".LoginActivity" />
-        <activity android:name=".PopupActivity" android:theme="@style/AppTheme.CustomTheme"/>
-        <activity android:name=".CentralScreenActivity"/>
+        <activity android:name=".PopupActivity" android:theme="@style/PopupTheme"/>
+        <activity android:name=".CentralScreenActivity" android:label="Name here?"/>
 
     </application>
 
