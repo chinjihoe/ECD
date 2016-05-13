@@ -28,6 +28,8 @@
             android:layout_height="match_parent">
 
             <Button
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
                 android:text="New Button"
                 android:id="@+id/button"
                 android:layout_weight="0.05"
@@ -36,8 +38,8 @@
             <Button
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="New Button"
-                android:id="@+id/button2"
+                android:text="Speech"
+                android:id="@+id/speechButton"
                 android:layout_weight="0.05"
                 android:layout_column="1" />
         </TableRow>
