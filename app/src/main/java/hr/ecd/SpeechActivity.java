@@ -119,7 +119,7 @@ public class SpeechActivity extends Activity implements RecognitionListener {
         Log.i(LOG_TAG, "onPartialResults");
         ArrayList<String> matches = partialResults.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
         String text = matches.get(0);
-        if(text.contains("punt")||text.contains("vraagteken")||text.contains("uitroepteken")){
+        if(text.contains(" punt")||text.contains(" vraagteken")||text.contains(" uitroepteken")){
             text = text.replaceAll(" punt",".");
             text = text.replaceAll(" vraagteken","?");
             text = text.replaceAll(" uitroepteken","!");
