@@ -25,6 +25,7 @@ public class SpeechActivity extends Activity implements RecognitionListener {
     private SpeechRecognizer speech = null;
     private Intent recognizerIntent;
     private String LOG_TAG = "VoiceRecognitionActivity";
+    private String totalText = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,22 +34,12 @@ public class SpeechActivity extends Activity implements RecognitionListener {
         returnedText = (TextView) findViewById(R.id.textView1);
         progressBar = (ProgressBar) findViewById(R.id.progressBar1);
         toggleButton = (ToggleButton) findViewById(R.id.toggleButton1);
-
-        progressBar.setVisibility(View.INVISIBLE);
-        speech = SpeechRecognizer.createSpeechRecognizer(this);
-        speech.setRecognitionListener(this);
-        recognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE,"en");
-        recognizerIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE,this.getPackageName());
-        recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH);
-        //recognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 3);
-        recognizerIntent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
-
-        toggleButton.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
+        progressBar.setVisibility(View.VISIBLE);
+        progressBar.setIndeterminate(true);
+        listen();
+        /*toggleButton.setOnCheckedChangeListener(new OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView,
-                                         boolean isChecked) {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     progressBar.setVisibility(View.VISIBLE);
                     progressBar.setIndeterminate(true);
@@ -59,9 +50,22 @@ public class SpeechActivity extends Activity implements RecognitionListener {
                     speech.stopListening();
                 }
             }
-        });
-
+        });*/
     }
+
+    public void listen(){
+        speech = SpeechRecognizer.createSpeechRecognizer(this);
+        speech.setRecognitionListener(this);
+        recognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE,"en");
+        recognizerIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE,this.getPackageName());
+        recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH);
+        recognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
+        recognizerIntent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
+        //recognizerIntent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, 5000);
+        speech.startListening(recognizerIntent);
+    }
+
 
     @Override
     public void onResume() {
@@ -71,10 +75,10 @@ public class SpeechActivity extends Activity implements RecognitionListener {
     @Override
     protected void onPause() {
         super.onPause();
-        /*if (speech != null) {
+        if (speech != null) {
             speech.destroy();
             Log.i(LOG_TAG, "destroy");
-        }*/
+        }
     }
 
     @Override
@@ -86,7 +90,6 @@ public class SpeechActivity extends Activity implements RecognitionListener {
 
     @Override
     public void onBufferReceived(byte[] buffer) {
-
         Log.i(LOG_TAG, "onBufferReceived: " + buffer);
     }
 
@@ -95,14 +98,15 @@ public class SpeechActivity extends Activity implements RecognitionListener {
         Log.i(LOG_TAG, "onEndOfSpeech");
         //progressBar.setIndeterminate(true);
         //toggleButton.setChecked(false);
+
     }
 
     @Override
     public void onError(int errorCode) {
         String errorMessage = getErrorText(errorCode);
         Log.d(LOG_TAG, "FAILED " + errorMessage);
-        returnedText.setText(errorMessage);
-        toggleButton.setChecked(false);
+        speech.destroy();
+        listen();
     }
 
     @Override
@@ -112,37 +116,33 @@ public class SpeechActivity extends Activity implements RecognitionListener {
 
     @Override
     public void onPartialResults(Bundle partialResults) {
-
         Log.i(LOG_TAG, "onPartialResults");
-        if ((partialResults != null) && partialResults.containsKey(SpeechRecognizer.RESULTS_RECOGNITION))  {
-            List<String> heard = partialResults.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
-            String resultText = heard.get(0);
-            heard = null;
-            returnedText.append(resultText);
-
+        ArrayList<String> matches = partialResults.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
+        String text = matches.get(0);
+        if(text.contains("punt")||text.contains("vraagteken")||text.contains("uitroepteken")){
+            text = text.replaceAll(" punt",".");
+            text = text.replaceAll(" vraagteken","?");
+            text = text.replaceAll(" uitroepteken","!");
         }
+        returnedText.setText(totalText + text);
     }
 
     @Override
     public void onReadyForSpeech(Bundle arg0) {
-
         Log.i(LOG_TAG, "onReadyForSpeech");
     }
 
     @Override
     public void onResults(Bundle results) {
         Log.i(LOG_TAG, "onResults");
-        /*ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
-        String text = "";
-        for (String result : matches)
-            text += result + "\n";
-
-        returnedText.setText(text);*/
+        totalText = (String)returnedText.getText()+" ";
+        speech.destroy();
+        listen();
     }
 
     @Override
     public void onRmsChanged(float rmsdB) {
-        Log.i(LOG_TAG, "onRmsChanged: " + rmsdB);
+        //Log.i(LOG_TAG, "onRmsChanged: " + rmsdB);
         progressBar.setProgress((int) rmsdB);
     }
 
@@ -182,5 +182,4 @@ public class SpeechActivity extends Activity implements RecognitionListener {
         }
         return message;
     }
-
 }
