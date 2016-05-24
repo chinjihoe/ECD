@@ -3,6 +3,7 @@ package hr.ecd;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Context;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
@@ -16,56 +17,63 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
+import android.media.AudioManager;
 
 public class SpeechActivity extends Activity implements RecognitionListener {
 
     private TextView returnedText;
     private ToggleButton toggleButton;
     private ProgressBar progressBar;
+    private AudioManager audioManager;
     private SpeechRecognizer speech = null;
     private Intent recognizerIntent;
     private String LOG_TAG = "VoiceRecognitionActivity";
     private String totalText = "";
+    private int streamVolume = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.speech);
+        audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
         returnedText = (TextView) findViewById(R.id.textView1);
         progressBar = (ProgressBar) findViewById(R.id.progressBar1);
         toggleButton = (ToggleButton) findViewById(R.id.toggleButton1);
         progressBar.setVisibility(View.VISIBLE);
         progressBar.setIndeterminate(true);
         listen();
-        /*toggleButton.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+        toggleButton.setOnCheckedChangeListener(new OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     progressBar.setVisibility(View.VISIBLE);
                     progressBar.setIndeterminate(true);
-                    speech.startListening(recognizerIntent);
+                    listen();
                 } else {
                     progressBar.setIndeterminate(false);
                     progressBar.setVisibility(View.INVISIBLE);
                     speech.stopListening();
+                    speech.destroy();
                 }
             }
-        });*/
+        });
     }
 
     public void listen(){
+        streamVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 0, 0);
+
         speech = SpeechRecognizer.createSpeechRecognizer(this);
         speech.setRecognitionListener(this);
         recognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE,"en");
+        recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, "nl");
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE,this.getPackageName());
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH);
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
-        //recognizerIntent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, 5000);
         speech.startListening(recognizerIntent);
     }
-
 
     @Override
     public void onResume() {
@@ -98,15 +106,21 @@ public class SpeechActivity extends Activity implements RecognitionListener {
         Log.i(LOG_TAG, "onEndOfSpeech");
         //progressBar.setIndeterminate(true);
         //toggleButton.setChecked(false);
-
+        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, streamVolume, 0);
     }
 
     @Override
     public void onError(int errorCode) {
         String errorMessage = getErrorText(errorCode);
         Log.d(LOG_TAG, "FAILED " + errorMessage);
-        speech.destroy();
-        listen();
+        switch(errorCode) {
+            case SpeechRecognizer.ERROR_SPEECH_TIMEOUT:
+            case SpeechRecognizer.ERROR_NO_MATCH:
+                speech.destroy();
+
+                listen();
+                break;
+        }
     }
 
     @Override
@@ -119,11 +133,17 @@ public class SpeechActivity extends Activity implements RecognitionListener {
         Log.i(LOG_TAG, "onPartialResults");
         ArrayList<String> matches = partialResults.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
         String text = matches.get(0);
-        if(text.contains(" punt")||text.contains(" vraagteken")||text.contains(" uitroepteken")){
-            text = text.replaceAll(" punt",".");
-            text = text.replaceAll(" vraagteken","?");
-            text = text.replaceAll(" uitroepteken","!");
+        String commands = text.toLowerCase();
+        text = text.replaceAll(" punt",".");
+        text = text.replaceAll(" vraagteken","?");
+        text = text.replaceAll(" uitroepteken","!");
+
+        if (text.contains("stop opnemen")) {
+            speech.stopListening();
+            speech.destroy();
+            text = text.replaceAll("stop opnemen", "");
         }
+
         returnedText.setText(totalText + text);
     }
 
@@ -142,7 +162,6 @@ public class SpeechActivity extends Activity implements RecognitionListener {
 
     @Override
     public void onRmsChanged(float rmsdB) {
-        //Log.i(LOG_TAG, "onRmsChanged: " + rmsdB);
         progressBar.setProgress((int) rmsdB);
     }
 

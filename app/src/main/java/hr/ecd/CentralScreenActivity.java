@@ -29,6 +29,14 @@ public class CentralScreenActivity extends AppCompatActivity {
                 startActivity(new Intent(CentralScreenActivity.this,SpeechActivity.class));
             }
         });
+
+        final Button button = (Button)findViewById(R.id.button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(CentralScreenActivity.this, NFCActivity.class));
+            }
+        });
     }
 
 

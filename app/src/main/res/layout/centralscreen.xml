@@ -12,7 +12,9 @@
         android:minHeight="?attr/actionBarSize"
         android:background="@color/Crimson"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:titleTextColor="@color/White"
+        app:subtitleTextColor="@color/White">
     </android.support.v7.widget.Toolbar>
 
 
@@ -30,7 +32,7 @@
             <Button
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="New Button"
+                android:text="NFC"
                 android:id="@+id/button"
                 android:layout_weight="0.05"
                 android:layout_column="0" />
