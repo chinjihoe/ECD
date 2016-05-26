@@ -30,9 +30,8 @@
             android:label="Name here?"
             android:titleTextColor="@color/White"
             />
-        <activity android:name=".SpeechToTextActivity" />
         <activity android:name=".SpeechActivity" />
-        <activity android:name=".NFCActivity"></activity>
+        <activity android:name=".NFCActivity"/>
     </application>
 
 </manifest>

@@ -1,7 +1,6 @@
 package hr.ecd;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import android.content.Context;
 import android.speech.RecognitionListener;
@@ -36,9 +35,9 @@ public class SpeechActivity extends Activity implements RecognitionListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.speech);
         audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
-        returnedText = (TextView) findViewById(R.id.textView1);
-        progressBar = (ProgressBar) findViewById(R.id.progressBar1);
-        toggleButton = (ToggleButton) findViewById(R.id.toggleButton1);
+        returnedText = (TextView) findViewById(R.id.speechTextView);
+        progressBar = (ProgressBar) findViewById(R.id.speechProgressBar);
+        toggleButton = (ToggleButton) findViewById(R.id.speechToggleButton);
         progressBar.setVisibility(View.VISIBLE);
         progressBar.setIndeterminate(true);
         listen();
@@ -142,6 +141,7 @@ public class SpeechActivity extends Activity implements RecognitionListener {
             speech.stopListening();
             speech.destroy();
             text = text.replaceAll("stop opnemen", "");
+            toggleButton.setChecked(false);
         }
 
         returnedText.setText(totalText + text);
