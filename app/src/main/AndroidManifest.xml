@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.NFC" />
 
     <application
         android:allowBackup="true"
@@ -28,11 +29,23 @@
         <activity
             android:name=".CentralScreenActivity"
             android:label="Name here?"
-            android:titleTextColor="@color/White"
-            />
+            android:titleTextColor="@color/White" />
         <activity android:name=".SpeechToTextActivity" />
         <activity android:name=".SpeechActivity" />
-        <activity android:name=".NFCActivity"></activity>
+        <activity android:name=".NFCActivity" />
+        <activity
+            android:name=".clientActivityListActivity"
+            android:label="@string/title_clientactivity_list"
+            android:theme="@style/AppTheme"></activity>
+        <activity
+            android:name=".clientActivityDetailActivity"
+            android:label="@string/title_clientactivity_detail"
+            android:parentActivityName=".clientActivityListActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="hr.ecd.clientActivityListActivity" />
+        </activity>
     </application>
 
 </manifest>

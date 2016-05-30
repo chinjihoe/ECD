@@ -6,5 +6,7 @@
     <string name="speech_not_supported">Sorry! Your device doesn\'t support speech input</string>
     <string name="tap_on_mic">Tap on mic to speak</string>
     <string name="title_activity_nfc">NFCActivity</string>
+    <string name="title_clientactivity_list">Client</string>
+    <string name="title_clientactivity_detail">clientActivity Detail</string>
 
 </resources>
