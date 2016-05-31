@@ -8,6 +8,5 @@
     <string name="title_activity_nfc">NFCActivity</string>
     <string name="title_clientactivity_list">Client</string>
     <string name="title_clientactivity_detail">clientActivity Detail</string>
-    <string name="DEBUGGING">true</string>
 
 </resources>
