@@ -43,7 +43,6 @@ public class LoginActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(LoginActivity.this,NFCActivity.class)); //gaat naar nfc screen die dan naar speech screen gaat
-
             }
         });
 

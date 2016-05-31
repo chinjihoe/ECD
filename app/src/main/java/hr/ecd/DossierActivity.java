@@ -18,12 +18,12 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 /**
- * Created by Chinji on 31-5-2016.
+ * Het clienten dossier
  */
 public class DossierActivity extends AppCompatActivity {
 
-    ListView mDrawerList;
-    ArrayAdapter<String> mAdapter;
+    private ListView mDrawerList;
+    private ArrayAdapter<String> mAdapter;
     private ProgressDialog progressDialog;
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
@@ -31,38 +31,35 @@ public class DossierActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dossier);
 
         Toolbar toolbar=(Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
-        mActivityTitle = getTitle().toString();
         mDrawerList = (ListView)findViewById(R.id.navList);
         addDrawerItems();
         setupDrawer();
-
-
-        mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(DossierActivity.this, "Time for an upgrade!", Toast.LENGTH_SHORT).show();
-
-            }
-        });
-
+        drawerListener();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setProgress(ProgressDialog.STYLE_HORIZONTAL);
         progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Loadings chi's bullsacknoodle");
+        progressDialog.setMessage("Doe normaal man");
         progressDialog.show();
-
     }
+
+    private void drawerListener(){
+        mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(DossierActivity.this, "Time for an upgrade!", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     private void addDrawerItems() {
         String[] osArray = { "Recent activities","Record activities"};
         mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, osArray);
@@ -70,6 +67,8 @@ public class DossierActivity extends AppCompatActivity {
     }
 
     private void setupDrawer() {
+        mActivityTitle = getTitle().toString();
+        mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close) {
 
             /** Called when a drawer has settled in a completely open state. */
@@ -86,10 +85,8 @@ public class DossierActivity extends AppCompatActivity {
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
         };
-
-
         mDrawerToggle.setDrawerIndicatorEnabled(true);
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
+        mDrawerLayout.addDrawerListener(mDrawerToggle);
     }
 
     @Override
@@ -98,17 +95,14 @@ public class DossierActivity extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
-
         // Activate the navigation drawer toggle
         if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
