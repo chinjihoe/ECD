@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 /**
  De login activity
@@ -31,7 +32,8 @@ public class LoginActivity extends AppCompatActivity{
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(LoginActivity.this,PopupActivity.class)); //voor nu zal het altijd een Failure popup geven
+                loginToast();
+                startActivity(new Intent(LoginActivity.this,SpeechActivity.class));
             }
         });
 
@@ -40,8 +42,14 @@ public class LoginActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(LoginActivity.this,NFCActivity.class)); //gaat naar nfc screen die dan naar speech screen gaat
+
             }
         });
 
     }
+
+    protected void loginToast(){
+        Toast.makeText(this , "login failed",Toast.LENGTH_LONG).show();
+    }
 }
+
