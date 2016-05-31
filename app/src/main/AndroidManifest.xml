@@ -25,12 +25,12 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".LoginActivity" />
         <activity
-            android:name=".CentralScreenActivity"
-            android:label="Name here?"
-            android:titleTextColor="@color/White" />
+            android:name=".DossierActivity"
+            android:label="Naam client"
+            />
         <activity android:name=".SpeechActivity" />
         <activity android:name=".NFCActivity" />
-        <activity android:name=".ClientAcivity"></activity>
+        <activity android:name=".ClientAcivity"/>
     </application>
 
 </manifest>

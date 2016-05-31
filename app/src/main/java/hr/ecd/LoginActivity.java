@@ -33,7 +33,7 @@ public class LoginActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 loginToast();
-                startActivity(new Intent(LoginActivity.this,SpeechActivity.class));
+                startActivity(new Intent(LoginActivity.this,DossierActivity.class));
             }
         });
 

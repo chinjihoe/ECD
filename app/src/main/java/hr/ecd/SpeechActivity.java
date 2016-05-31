@@ -1,7 +1,6 @@
 package hr.ecd;
 
 import java.util.ArrayList;
-
 import android.content.Context;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
