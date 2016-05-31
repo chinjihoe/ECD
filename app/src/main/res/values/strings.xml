@@ -8,5 +8,7 @@
     <string name="title_activity_nfc">NFCActivity</string>
     <string name="title_clientactivity_list">Client</string>
     <string name="title_clientactivity_detail">clientActivity Detail</string>
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
 
 </resources>
