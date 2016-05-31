@@ -34,6 +34,7 @@ public class LoginActivity extends AppCompatActivity{
             public void onClick(View v) {
                 loginToast();
                 startActivity(new Intent(LoginActivity.this,DossierActivity.class));
+                //startActivity(new Intent(LoginActivity.this,SpeechActivity.class));
             }
         });
 

@@ -41,7 +41,7 @@ public class DossierActivity extends AppCompatActivity {
 
     }
     private void addDrawerItems() {
-        String[] osArray = { "Recent","Record"};
+        String[] osArray = { "Recent activities","Record activities"};
         mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, osArray);
         mDrawerList.setAdapter(mAdapter);
     }
