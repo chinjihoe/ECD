@@ -23,7 +23,17 @@ public class NFCActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nfc);
 
+        if(((Ecd)this.getApplication()).getDebugging()) {
+            Integer userId = 512;
+            Intent intent = new Intent(this, ClientAcivity.class);
+            intent.putExtra("userId", userId.toString());
+
+            startActivityForResult(intent, 1);
+        }
+
         mNfcAdapter = (NfcAdapter) NfcAdapter.getDefaultAdapter(this);
+
+
     }
 
     @Override
@@ -51,7 +61,7 @@ public class NFCActivity extends AppCompatActivity {
             String text = getTextFromNdefRecord(ndefRecord);
             try {
                 Integer userId = Integer.parseInt(text);
-                Intent intent = new Intent(this, clientActivityListActivity.class);
+                Intent intent = new Intent(this, ClientAcivity.class);
                 intent.putExtra("userId", userId.toString());
 
                 startActivityForResult(intent, 1);
@@ -88,7 +98,8 @@ public class NFCActivity extends AppCompatActivity {
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
         IntentFilter[] intentFilter = new IntentFilter[]{};
 
-        mNfcAdapter.enableForegroundDispatch(this, pendingIntent, intentFilter, null);
+        if(mNfcAdapter != null)
+            mNfcAdapter.enableForegroundDispatch(this, pendingIntent, intentFilter, null);
 
 
 
@@ -97,7 +108,8 @@ public class NFCActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
-        mNfcAdapter.disableForegroundDispatch(this);
+        if(mNfcAdapter != null)
+            mNfcAdapter.disableForegroundDispatch(this);
         super.onPause();
     }
 

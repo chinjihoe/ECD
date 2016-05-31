@@ -14,8 +14,15 @@ import android.widget.Button;
 public class LoginActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.login);
+
+        // Enable debugging
+        ((Ecd)this.getApplication()).setDebugging(true);
+        //
+
 
         Toolbar toolbar=(Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
