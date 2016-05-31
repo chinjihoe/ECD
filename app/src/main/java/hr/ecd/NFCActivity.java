@@ -25,7 +25,7 @@ public class NFCActivity extends AppCompatActivity {
 
         if(((Ecd)this.getApplication()).getDebugging()) {
             Integer userId = 512;
-            Intent intent = new Intent(this, ClientAcivity.class);
+            Intent intent = new Intent(this, DossierActivity.class);
             intent.putExtra("userId", userId.toString());
 
             startActivityForResult(intent, 1);
@@ -61,7 +61,7 @@ public class NFCActivity extends AppCompatActivity {
             String text = getTextFromNdefRecord(ndefRecord);
             try {
                 Integer userId = Integer.parseInt(text);
-                Intent intent = new Intent(this, ClientAcivity.class);
+                Intent intent = new Intent(this, DossierActivity.class);
                 intent.putExtra("userId", userId.toString());
 
                 startActivityForResult(intent, 1);

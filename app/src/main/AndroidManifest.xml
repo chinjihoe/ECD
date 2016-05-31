@@ -30,7 +30,6 @@
             />
         <activity android:name=".SpeechActivity" />
         <activity android:name=".NFCActivity" />
-        <activity android:name=".ClientAcivity"/>
     </application>
 
 </manifest>

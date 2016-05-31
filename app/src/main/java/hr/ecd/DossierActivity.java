@@ -1,5 +1,6 @@
 package hr.ecd;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +19,7 @@ public class DossierActivity extends AppCompatActivity {
 
     ListView mDrawerList;
     ArrayAdapter<String> mAdapter;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,11 +33,24 @@ public class DossierActivity extends AppCompatActivity {
         Toolbar toolbar=(Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setProgress(ProgressDialog.STYLE_HORIZONTAL);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Loadings chi's bullsacknoodle");
+        progressDialog.show();
+
     }
     private void addDrawerItems() {
         String[] osArray = { "Recent","Record"};
         mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, osArray);
         mDrawerList.setAdapter(mAdapter);
+    }
+
+    @Override
+    protected void onStart() {
+        progressDialog.hide();
+        progressDialog.dismiss();
+        super.onStart();
     }
 
 }
