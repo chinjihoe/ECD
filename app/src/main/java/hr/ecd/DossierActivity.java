@@ -55,19 +55,7 @@ public class DossierActivity extends AppCompatActivity {
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mDrawerLayout.closeDrawer(mDrawerList);
-                switch (position){
-                    case 0:
-                        break;
-                    case 1:
-                        startActivity(new Intent(DossierActivity.this,SpeechActivity.class));
-                        break;
-                    default:
-                        break;
-                }
-                Toast.makeText(DossierActivity.this, "click", Toast.LENGTH_SHORT).show();
-
-
+                Toast.makeText(DossierActivity.this, "Time for an upgrade!", Toast.LENGTH_SHORT).show();
             }
         });
     }

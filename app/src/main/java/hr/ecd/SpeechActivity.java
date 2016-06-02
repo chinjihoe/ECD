@@ -135,7 +135,6 @@ public class SpeechActivity extends Activity implements RecognitionListener {
         text = text.replaceAll(" punt",".");
         text = text.replaceAll(" vraagteken","?");
         text = text.replaceAll(" uitroepteken","!");
-        text = text.replaceAll(" komma",", ");
 
         if (text.contains("stop opnemen")) {
             speech.stopListening();
