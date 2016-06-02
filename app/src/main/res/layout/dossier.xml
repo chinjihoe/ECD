@@ -1,38 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:orientation="vertical" >
-
-<android.support.v7.widget.Toolbar
-    android:id="@+id/toolbar"
-    android:minHeight="?attr/actionBarSize"
-    android:background="@color/Crimson"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_alignParentTop="true"
-    android:layout_alignParentRight="true"
-    android:layout_alignParentEnd="true">
-</android.support.v7.widget.Toolbar>
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:minHeight="?attr/actionBarSize"
+        android:background="@color/Crimson"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+    </android.support.v7.widget.Toolbar>
 
     <android.support.v4.widget.DrawerLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
+        android:layout_height="match_parent"
+        android:descendantFocusability="blocksDescendants"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        >
         <!-- Side navigation drawer UI -->
         <ListView
+            android:descendantFocusability="blocksDescendants"
             android:id="@+id/navList"
             android:layout_width="200dp"
             android:layout_height="526dp"
             android:layout_gravity="left|start"
-            android:background="#ffeeeeee" />
+            android:background="#ffeeeeee"
+            android:focusable="false"
+            android:focusableInTouchMode="false"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Voornaam: "
+                android:id="@+id/voornaamText" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Achternaam: "
+                android:id="@+id/achternaamText"
+                android:layout_below="@+id/voornaamText"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Leeftijd: "
+                android:id="@+id/leeftijdText"
+                android:layout_below="@+id/achternaamText"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Geboorte datum: "
+                android:id="@+id/geboortedatumText"
+                android:layout_below="@+id/leeftijdText"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Geslacht: "
+                android:id="@+id/geslachtText"
+                android:layout_below="@+id/geboortedatumText"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Bijzonderheden: "
+                android:id="@+id/bijzonderhedenText"
+                android:layout_below="@+id/geslachtText"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Kamer nr.: "
+                android:id="@+id/kamernrText"
+                android:layout_below="@+id/bijzonderhedenText"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
+        </RelativeLayout>
+
+
     </android.support.v4.widget.DrawerLayout>
-
-
-
 
 
 </LinearLayout>
