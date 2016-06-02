@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.NFC" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name="Ecd"
@@ -31,5 +32,7 @@
         <activity android:name=".SpeechActivity" />
         <activity android:name=".NFCActivity" />
     </application>
+
+
 
 </manifest>
