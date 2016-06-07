@@ -27,7 +27,6 @@
         <activity android:name=".LoginActivity" />
         <activity
             android:name=".DossierActivity"
-            android:label="Naam client"
             />
         <activity android:name=".SpeechActivity" />
         <activity android:name=".NFCActivity" />

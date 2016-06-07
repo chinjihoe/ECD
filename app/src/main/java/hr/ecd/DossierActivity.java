@@ -8,6 +8,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -47,6 +48,13 @@ public class DossierActivity extends AppCompatActivity {
 
         Toolbar toolbar=(Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        try{
+            getSupportActionBar().setTitle(((Ecd)this.getApplication()).getEmployeeJSON().getString("name"));
+        }
+        catch (JSONException e){
+            e.printStackTrace();
+        }
+
 
         mDrawerList = (ListView)findViewById(R.id.navList);
 

@@ -9,8 +9,11 @@ import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.nfc.NfcAdapter;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.Toast;
+
+import org.json.JSONException;
 
 import java.io.UnsupportedEncodingException;
 
@@ -22,6 +25,16 @@ public class NFCActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nfc);
+        Toolbar toolbar=(Toolbar)findViewById(R.id.toolbar);
+        /*
+        setSupportActionBar(toolbar);
+        try{
+            toolbar.setTitle(((Ecd)this.getApplication()).getEmployeeJSON().getString("name"));
+        }
+        catch (JSONException e){
+            e.printStackTrace();
+        }*/
+
 
         if(((Ecd)this.getApplication()).getDebugging()) {
             Integer userId = 1;
@@ -32,13 +45,10 @@ public class NFCActivity extends AppCompatActivity {
         }
 
         mNfcAdapter = (NfcAdapter) NfcAdapter.getDefaultAdapter(this);
-
-
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
-
         //Toast.makeText(this, "NFC intent!", Toast.LENGTH_LONG).show();
 
         if (intent.hasExtra(mNfcAdapter.EXTRA_TAG)) {
@@ -100,8 +110,6 @@ public class NFCActivity extends AppCompatActivity {
 
         if(mNfcAdapter != null)
             mNfcAdapter.enableForegroundDispatch(this, pendingIntent, intentFilter, null);
-
-
 
         super.onResume();
     }
