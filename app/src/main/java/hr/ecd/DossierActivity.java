@@ -105,7 +105,7 @@ public class DossierActivity extends AppCompatActivity {
             emailText.append(response.getString("email"));
             burgerlijkestaatText.append(response.getString("martial"));
             gewichtText.append(response.getString("weight") + "kg");
-            geslachtText.append((response.getString("sex") == "1") ? "Man" : "Vrouw");
+            geslachtText.append((response.getString("sex").equals("1")) ? "Man" : "Vrouw");
             String[] age = response.getString("birthdate").split("-");
             leeftijdText.append("" + getAge(Integer.parseInt(age[0]),Integer.parseInt(age[1]), 1));
 
