@@ -27,7 +27,9 @@ public class SpeechActivity extends Activity implements RecognitionListener {
     private Intent recognizerIntent;
     private String LOG_TAG = "VoiceRecognitionActivity";
     private String totalText = "";
+    private String partialText = "";
     private int streamVolume = 0;
+    private TextView recentJournaal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +39,7 @@ public class SpeechActivity extends Activity implements RecognitionListener {
         returnedText = (TextView) findViewById(R.id.speechTextView);
         progressBar = (ProgressBar) findViewById(R.id.speechProgressBar);
         toggleButton = (ToggleButton) findViewById(R.id.speechToggleButton);
+        recentJournaal = (TextView) findViewById(R.id.recenteJournaalText);
         progressBar.setVisibility(View.VISIBLE);
         progressBar.setIndeterminate(true);
         listen();
@@ -53,6 +56,7 @@ public class SpeechActivity extends Activity implements RecognitionListener {
                     progressBar.setVisibility(View.INVISIBLE);
                     speech.stopListening();
                     speech.destroy();
+                    setSpeechText(totalText+partialText);
                 }
             }
         });
@@ -130,21 +134,21 @@ public class SpeechActivity extends Activity implements RecognitionListener {
     public void onPartialResults(Bundle partialResults) {
         Log.i(LOG_TAG, "onPartialResults");
         ArrayList<String> matches = partialResults.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
-        String text = matches.get(0);
-        String commands = text.toLowerCase();
-        text = text.replaceAll(" punt",".");
-        text = text.replaceAll(" vraagteken","?");
-        text = text.replaceAll(" uitroepteken","!");
-        text = text.replaceAll(" komma",", ");
+        partialText = matches.get(0);
+        String commands = partialText.toLowerCase();
+        partialText = partialText.replaceAll(" punt",".");
+        partialText = partialText.replaceAll(" vraagteken","?");
+        partialText = partialText.replaceAll(" uitroepteken","!");
+        partialText = partialText.replaceAll(" komma",", ");
 
-        if (text.contains("stop opnemen")) {
+        if (partialText.contains("stop opnemen")) {
             speech.stopListening();
             speech.destroy();
-            text = text.replaceAll("stop opnemen", "");
+            partialText = partialText.replaceAll("stop opnemen", "");
             toggleButton.setChecked(false);
         }
 
-        returnedText.setText(totalText + text);
+        returnedText.setText(totalText + partialText);
     }
 
     @Override
@@ -200,5 +204,10 @@ public class SpeechActivity extends Activity implements RecognitionListener {
                 break;
         }
         return message;
+    }
+
+    public void setSpeechText(String speechText){
+        ((Ecd)this.getApplication()).setSpeechText(speechText);
+        Log.i("Speechtext",((Ecd)this.getApplication()).getSpeechText());
     }
 }

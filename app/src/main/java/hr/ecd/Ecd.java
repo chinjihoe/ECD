@@ -7,6 +7,11 @@ import android.app.Application;
  */
 public class Ecd extends Application{
     private boolean debugging = false;
+    private String speechText = "";
+
+
+
+
 
     public void setDebugging(boolean debugging) {
         this.debugging = debugging;
@@ -15,4 +20,10 @@ public class Ecd extends Application{
     public boolean getDebugging() {
         return debugging;
     }
+
+    public void setSpeechText(String speechText){this.speechText = speechText;}
+    public String getSpeechText(){
+        return speechText;
+    }
+
 }
