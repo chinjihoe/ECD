@@ -17,6 +17,13 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.android.volley.Response;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.concurrent.BlockingQueue;
+
 /**
  * Het clienten dossier
  */
@@ -50,6 +57,26 @@ public class DossierActivity extends AppCompatActivity {
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Doe normaal man");
         progressDialog.show();
+
+        Intent intent = getIntent();
+
+        Api api = new Api();
+        try {
+            api.request(this, "/client/" + intent.getStringExtra("id"), null, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    fillData(response);
+                }
+            });
+        }
+        catch(JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void fillData(JSONObject response) {
+
     }
 
     private void drawerListener(){
@@ -131,6 +158,7 @@ public class DossierActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
+
         progressDialog.hide();
         progressDialog.dismiss();
         super.onStart();

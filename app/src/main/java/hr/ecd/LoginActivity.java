@@ -75,12 +75,12 @@ public class LoginActivity extends AppCompatActivity{
     private void loginRequest(String username, String password){
         try {
 
-            final JSONObject jsonBody = new JSONObject();
+            JSONObject jsonBody = new JSONObject();
             jsonBody.put("username", username);
             jsonBody.put("password", password);
 
             Api api = new Api();
-            JSONObject response = api.request(jsonBody, this);
+            JSONObject response = api.request(this, "/login", jsonBody);
 
             String loginSuccess = response.getString("login");
             if(loginSuccess=="true")

@@ -13,21 +13,41 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+
 /**
  * Created by niekeichner on 07/06/16.
  */
+
+
 public class Api {
-    private final String URL = "http://80.57.4.176:523/login";
+
+    public enum Errors {
+        USER_NOT_FOUND,
+        FOUR_O_FOUR;
+
+        private int num;
+
+        public static Errors fromInteger(Integer in) {
+            switch(in) {
+                case 10:
+                    return USER_NOT_FOUND;
+                case 404:
+                    return FOUR_O_FOUR;
+            }
+            return null;
+        }
+
+    }
+
+    private final String rootUrl = "http://80.57.4.176:523";
     private JSONObject apiResponse = null;
 
-    public JSONObject request(JSONObject jsonBody, Context context) {
-        JsonObjectRequest jsonReq = new JsonObjectRequest(URL, jsonBody,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        apiResponse = response;
-                    }
-                }, new Response.ErrorListener() {
+
+    public void request(Context context, String apiUrl, JSONObject jsonBody, final Response.Listener<JSONObject> callback) throws JSONException {
+        JsonObjectRequest jsonReq = new JsonObjectRequest(rootUrl + apiUrl, jsonBody,
+                callback, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.v("ERROR:%n %s", error.getMessage());
@@ -42,7 +62,7 @@ public class Api {
         catch(Exception e) {
 
         }
-        return apiResponse;
+
     }
 
 }
