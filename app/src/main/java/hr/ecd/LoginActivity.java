@@ -58,7 +58,7 @@ public class LoginActivity extends AppCompatActivity{
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendRequest(username.getText().toString(),password.getText().toString());
+                loginRequest(username.getText().toString(),password.getText().toString());
 
             }
         });
@@ -72,10 +72,12 @@ public class LoginActivity extends AppCompatActivity{
         });
     }
 
-    private void sendRequest(String username, String password){
+    private void loginRequest(String username, String password){
         try {
 
-            final JSONObject jsonBody = new JSONObject("{\"username\":\""+username+"\",\"password\":\""+password+"\"}");
+            final JSONObject jsonBody = new JSONObject();
+            jsonBody.put("username", username);
+            jsonBody.put("password", password);
 
             Api api = new Api();
             JSONObject response = api.request(jsonBody, this);
@@ -87,7 +89,7 @@ public class LoginActivity extends AppCompatActivity{
                 loginToast("Login Failed");
         }
         catch (JSONException e){
-
+            e.printStackTrace();
         }
     }
 
