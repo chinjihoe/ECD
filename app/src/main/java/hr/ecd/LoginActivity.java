@@ -80,13 +80,24 @@ public class LoginActivity extends AppCompatActivity{
             jsonBody.put("password", password);
 
             Api api = new Api();
-            JSONObject response = api.request(this, "/login", jsonBody);
+            api.request(this, "/login", jsonBody, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    try{
+                        String loginSuccess = response.getString("login");
+                        if(loginSuccess=="true")
+                            startActivity(new Intent(LoginActivity.this,DossierActivity.class));
+                        else
+                            loginToast("Login Failed");
+                    }
+                    catch (JSONException e){
 
-            String loginSuccess = response.getString("login");
-            if(loginSuccess=="true")
-                startActivity(new Intent(LoginActivity.this,DossierActivity.class));
-            else
-                loginToast("Login Failed");
+                    }
+
+                }
+            });
+
+
         }
         catch (JSONException e){
             e.printStackTrace();
