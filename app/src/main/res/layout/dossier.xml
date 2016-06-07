@@ -41,62 +41,164 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Voornaam: "
-                android:id="@+id/voornaamText" />
+                android:text="Attentie"
+                android:id="@+id/attentieKopText"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:singleLine="true"
+                android:textColor="@color/Black"
+                android:textSize="20dp" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Achternaam: "
-                android:id="@+id/achternaamText"
-                android:layout_below="@+id/voornaamText"
+                android:text="ATTENTIETEXT"
+                android:id="@+id/attentieText"
+                android:layout_below="@+id/attentieKopText"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true" />
-            <TextView
+
+            <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Leeftijd: "
-                android:id="@+id/leeftijdText"
-                android:layout_below="@+id/achternaamText"
+                android:layout_below="@+id/attentieText"
                 android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
-            <TextView
+                android:layout_alignParentStart="false"
+                android:layout_marginTop="15dp"
+                android:id="@+id/relativeLayout">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Client"
+                    android:id="@+id/clientKopText"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:singleLine="true"
+                    android:textColor="@color/Black"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Voornaam: "
+                    android:id="@+id/voornaamText"
+                    android:layout_below="@+id/clientKopText"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Achternaam: "
+                    android:id="@+id/achternaamText"
+                    android:layout_below="@+id/voornaamText"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Leeftijd: "
+                    android:id="@+id/leeftijdText"
+                    android:layout_below="@+id/achternaamText"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Geboorte datum: "
+                    android:id="@+id/geboortedatumText"
+                    android:layout_below="@+id/leeftijdText"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Geslacht: "
+                    android:id="@+id/geslachtText"
+                    android:layout_below="@+id/geboortedatumText"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Kamer nr.: "
+                    android:id="@+id/kamernrText"
+                    android:layout_below="@+id/geslachtText"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true" />
+            </RelativeLayout>
+
+            <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Geboorte datum: "
-                android:id="@+id/geboortedatumText"
-                android:layout_below="@+id/leeftijdText"
+                android:layout_marginTop="15dp"
+                android:layout_below="@+id/relativeLayout"
                 android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
-            <TextView
+                android:layout_alignParentStart="true"
+                android:id="@+id/relativeLayout2">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Actuele episodes"
+                    android:id="@+id/actueleEpisodeKopText"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:singleLine="true"
+                    android:textColor="@color/Black"
+                    android:textSize="20dp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="ACTUELEEPISODES"
+                    android:id="@+id/actueleEpisodeText"
+                    android:layout_below="@+id/actueleEpisodeKopText"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Geslacht: "
-                android:id="@+id/geslachtText"
-                android:layout_below="@+id/geboortedatumText"
+                android:layout_below="@+id/relativeLayout2"
                 android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Bijzonderheden: "
-                android:id="@+id/bijzonderhedenText"
-                android:layout_below="@+id/geslachtText"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Kamer nr.: "
-                android:id="@+id/kamernrText"
-                android:layout_below="@+id/bijzonderhedenText"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="15dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Recente journaal"
+                    android:id="@+id/recenteJournaalKopText"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:singleLine="true"
+                    android:textColor="@color/Black"
+                    android:textSize="20dp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="RECENTEJOURNAAL"
+                    android:id="@+id/recenteJournaalText"
+                    android:layout_below="@+id/recenteJournaalKopText"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true" />
+
+
+            </RelativeLayout>
 
         </RelativeLayout>
 
