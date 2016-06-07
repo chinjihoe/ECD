@@ -15,13 +15,17 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.concurrent.BlockingQueue;
 
 /**
@@ -62,10 +66,11 @@ public class DossierActivity extends AppCompatActivity {
 
         Api api = new Api();
         try {
-            api.request(this, "/client/" + intent.getStringExtra("id"), null, new Response.Listener<JSONObject>() {
+            String userId = intent.getStringExtra("userId");
+            api.request(this, "/client/" + userId, null, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    fillData(response);
+                    fillClientData(response);
                 }
             });
         }
@@ -75,8 +80,60 @@ public class DossierActivity extends AppCompatActivity {
 
     }
 
-    private void fillData(JSONObject response) {
+    private void fillClientData(JSONObject response) {
 
+        TextView voornaamText = (TextView)findViewById(R.id.voornaamText),
+                 achternaamText = (TextView)findViewById(R.id.achternaamText),
+                 geboorteDatumText = (TextView)findViewById(R.id.geboortedatumText),
+                 kamerText = (TextView)findViewById(R.id.kamernrText),
+                 attentieText = (TextView)findViewById(R.id.attentieText),
+                 telefoonNummerText = (TextView)findViewById(R.id.telnrText),
+                 emailText = (TextView)findViewById(R.id.emailText),
+                 burgerlijkestaatText = (TextView)findViewById(R.id.burgelijkestaatText),
+                 gewichtText = (TextView)findViewById(R.id.gewichtText),
+                 geslachtText = (TextView)findViewById(R.id.geslachtText),
+                 leeftijdText = (TextView)findViewById(R.id.leeftijdText);
+
+        try {
+
+            voornaamText.append(response.getString("name"));
+            achternaamText.append(response.getString("surname"));
+            geboorteDatumText.append(response.getString("birthdate"));
+            kamerText.append(response.getString("room"));
+            telefoonNummerText.append(response.getString("phonenumber"));
+            emailText.append(response.getString("email"));
+            burgerlijkestaatText.append(response.getString("martial"));
+            gewichtText.append(response.getString("weight") + "kg");
+            geslachtText.append(response.getString("sex"));
+            String[] age = response.getString("birthday").split("-");
+            leeftijdText.append("" + getAge(Integer.parseInt(age[0]),Integer.parseInt(age[1]),Integer.parseInt(age[2])));
+
+            if(!response.isNull("detail"))
+                attentieText.setText(response.getString("detail"));
+
+        }
+        catch(JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public int getAge (int _year, int _month, int _day) {
+        GregorianCalendar cal = new GregorianCalendar();
+        int y, m, d, a;
+
+        y = cal.get(Calendar.YEAR);
+        m = cal.get(Calendar.MONTH);
+        d = cal.get(Calendar.DAY_OF_MONTH);
+        cal.set(_year, _month, _day);
+        a = y - cal.get(Calendar.YEAR);
+        if ((m < cal.get(Calendar.MONTH))
+                || ((m == cal.get(Calendar.MONTH)) && (d < cal
+                .get(Calendar.DAY_OF_MONTH)))) {
+            --a;
+        }
+        if(a < 0)
+            throw new IllegalArgumentException("Age < 0");
+        return a;
     }
 
     private void drawerListener(){

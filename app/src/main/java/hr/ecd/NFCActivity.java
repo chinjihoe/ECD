@@ -24,7 +24,7 @@ public class NFCActivity extends AppCompatActivity {
         setContentView(R.layout.activity_nfc);
 
         if(((Ecd)this.getApplication()).getDebugging()) {
-            Integer userId = 512;
+            Integer userId = 1;
             Intent intent = new Intent(this, DossierActivity.class);
             intent.putExtra("userId", userId.toString());
 

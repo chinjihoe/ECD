@@ -67,7 +67,7 @@ public class LoginActivity extends AppCompatActivity{
         skipButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(LoginActivity.this,NFCActivity.class)); //gaat naar nfc screen die dan naar speech screen gaat
+                startActivity(new Intent(LoginActivity.this, NFCActivity.class)); //gaat naar nfc screen die dan naar speech screen gaat
             }
         });
     }
@@ -86,7 +86,7 @@ public class LoginActivity extends AppCompatActivity{
                     try{
                         String loginSuccess = response.getString("login");
                         if(loginSuccess=="true")
-                            startActivity(new Intent(LoginActivity.this,DossierActivity.class));
+                            startActivity(new Intent(LoginActivity.this, NFCActivity.class));
                         else
                             loginToast("Login Failed");
                     }
