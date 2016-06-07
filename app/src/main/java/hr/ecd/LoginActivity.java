@@ -73,39 +73,20 @@ public class LoginActivity extends AppCompatActivity{
     }
 
     private void sendRequest(String username, String password){
-        final String URL = "http://80.57.4.176:523/login";
-        final JSONObject jsonBody;
-        try{
-            jsonBody = new JSONObject("{\"username\":\""+username+"\",\"password\":\""+password+"\"}");
+        try {
 
-            JsonObjectRequest jsonReq = new JsonObjectRequest(URL, jsonBody,
-                    new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            try {
-                                VolleyLog.v("Response:%n %s", response.toString(4));
-                                String loginSuccess = response.getString("login");
-                                if(loginSuccess=="true")
-                                    startActivity(new Intent(LoginActivity.this,DossierActivity.class));
-                                else
-                                    loginToast("Login Failed");
+            final JSONObject jsonBody = new JSONObject("{\"username\":\""+username+"\",\"password\":\""+password+"\"}");
 
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    VolleyLog.v("ERROR:%n %s", error.getMessage());
-                }
-            });
+            Api api = new Api();
+            JSONObject response = api.request(jsonBody, this);
 
-            // Adding request to volley request queue
-            RequestQueue requestQueue = Volley.newRequestQueue(this);
-            requestQueue.add(jsonReq);
+            String loginSuccess = response.getString("login");
+            if(loginSuccess=="true")
+                startActivity(new Intent(LoginActivity.this,DossierActivity.class));
+            else
+                loginToast("Login Failed");
         }
-        catch (Exception e){
+        catch (JSONException e){
 
         }
     }
