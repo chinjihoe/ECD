@@ -26,14 +26,14 @@ public class NFCActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nfc);
         Toolbar toolbar=(Toolbar)findViewById(R.id.toolbar);
-        /*
+
         setSupportActionBar(toolbar);
         try{
             toolbar.setTitle(((Ecd)this.getApplication()).getEmployeeJSON().getString("name"));
         }
         catch (JSONException e){
             e.printStackTrace();
-        }*/
+        }
 
 
         if(((Ecd)this.getApplication()).getDebugging()) {

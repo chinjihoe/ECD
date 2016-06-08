@@ -11,7 +11,7 @@ public class Ecd extends Application{
     private boolean debugging = false;
     private String speechText = "";
     private int accountId = 0;
-    private JSONObject employeeJSON= null;
+    private JSONObject employeeJSON;
 
 
     public void setDebugging(boolean debugging) {this.debugging = debugging;}

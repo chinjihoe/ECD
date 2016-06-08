@@ -87,7 +87,6 @@ public class LoginActivity extends AppCompatActivity{
                         if(loginSuccess=="true"){
                             setAccountId(response.getInt("id"));
                             getAccountInfo(response.getInt("id"));
-                            startActivity(new Intent(LoginActivity.this, NFCActivity.class));
                         }
                         else
                             loginToast("Login Failed");
@@ -112,6 +111,7 @@ public class LoginActivity extends AppCompatActivity{
                 @Override
                 public void onResponse(JSONObject response) {
                     setEmployeeJSON(response);
+                    startActivity(new Intent(LoginActivity.this, NFCActivity.class));
                 }
             });
         }

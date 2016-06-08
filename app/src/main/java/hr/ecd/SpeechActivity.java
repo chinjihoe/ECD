@@ -56,7 +56,7 @@ public class SpeechActivity extends Activity implements RecognitionListener {
                     progressBar.setVisibility(View.INVISIBLE);
                     speech.stopListening();
                     speech.destroy();
-                    setSpeechText(totalText+partialText);
+                    setSpeechText(returnedText.getText().toString());
                 }
             }
         });
