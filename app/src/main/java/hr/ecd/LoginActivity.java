@@ -100,13 +100,11 @@ public class LoginActivity extends AppCompatActivity{
         catch (JSONException e){
             e.printStackTrace();
         }
-
     }
 
     private void getAccountInfo(int accountId){
         try {
             Api api = new Api();
-            //Log.i("ACCOUNTID",((Ecd)this.getApplication()).getAccountId()+"");
             api.request(this, "/employee/"+accountId,null, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {

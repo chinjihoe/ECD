@@ -17,19 +17,41 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 import android.media.AudioManager;
 
+import org.w3c.dom.Text;
+
 public class SpeechActivity extends Activity implements RecognitionListener {
 
     private TextView returnedText;
+    private TextView subjectiefText;
+    private TextView objectiefText;
+    private TextView evaluatieText;
+    private TextView subjectiefKopText;
+    private TextView objectiefKopText;
+    private TextView evaluatieKopText;
+    private TextView planKopText;
+    private TextView planText;
     private ToggleButton toggleButton;
     private ProgressBar progressBar;
     private AudioManager audioManager;
     private SpeechRecognizer speech = null;
     private Intent recognizerIntent;
     private String LOG_TAG = "VoiceRecognitionActivity";
+    private int streamVolume = 0;
     private String totalText = "";
     private String partialText = "";
-    private int streamVolume = 0;
-    private TextView recentJournaal;
+    private String subjectiefTotalText = "";
+    private String objectiefTotalText = "";
+    private String evaluatieTotalText = "";
+    private String planTotalText = "";
+    private String[] allText = new String[4];
+
+    private SOEP SOEPStatus;
+    public enum SOEP{
+        SUBJECTIEF,
+        OBJECTIEF,
+        EVALUATIE,
+        PLAN;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,13 +59,20 @@ public class SpeechActivity extends Activity implements RecognitionListener {
         setContentView(R.layout.speech);
         audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
         returnedText = (TextView) findViewById(R.id.speechTextView);
+        subjectiefText = (TextView) findViewById(R.id.subjectiefText);
+        objectiefText = (TextView) findViewById(R.id.objectiefText);
+        evaluatieText = (TextView) findViewById(R.id.evaluatieText);
+        planText = (TextView) findViewById(R.id.planText);
+        subjectiefKopText = (TextView) findViewById(R.id.subjectiefKopText);
+        objectiefKopText = (TextView) findViewById(R.id.objectiefKopText);
+        evaluatieKopText = (TextView) findViewById(R.id.evaluatieKopText);
+        planKopText = (TextView) findViewById(R.id.planKopText);
+
         progressBar = (ProgressBar) findViewById(R.id.speechProgressBar);
         toggleButton = (ToggleButton) findViewById(R.id.speechToggleButton);
-        recentJournaal = (TextView) findViewById(R.id.recenteJournaalText);
         progressBar.setVisibility(View.VISIBLE);
         progressBar.setIndeterminate(true);
         listen();
-
         toggleButton.setOnCheckedChangeListener(new OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -56,11 +85,17 @@ public class SpeechActivity extends Activity implements RecognitionListener {
                     progressBar.setVisibility(View.INVISIBLE);
                     speech.stopListening();
                     speech.destroy();
-                    setSpeechText(returnedText.getText().toString());
+                    allText[0] = subjectiefText.getText().toString();
+                    allText[1] = objectiefText.getText().toString();
+                    allText[2] = evaluatieText.getText().toString();
+                    allText[3] = planText.getText().toString();
+                    setSpeechText(allText);
                 }
             }
         });
+        SOEPStatus = SOEP.SUBJECTIEF;
     }
+
 
     public void listen(){
         streamVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
@@ -135,20 +170,63 @@ public class SpeechActivity extends Activity implements RecognitionListener {
         Log.i(LOG_TAG, "onPartialResults");
         ArrayList<String> matches = partialResults.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
         partialText = matches.get(0);
-        String commands = partialText.toLowerCase();
-        partialText = partialText.replaceAll(" punt",".");
-        partialText = partialText.replaceAll(" vraagteken","?");
-        partialText = partialText.replaceAll(" uitroepteken","!");
-        partialText = partialText.replaceAll(" komma",", ");
+        partialText = partialText.replaceAll(" punt",".").replaceAll("punt",".");
+        partialText = partialText.replaceAll(" vraagteken","?").replaceAll("vraagteken","?");
+        partialText = partialText.replaceAll(" uitroepteken","!").replaceAll("uitroepteken","!");
+        partialText = partialText.replaceAll(" komma",", ").replaceAll("komma",", ");
 
-        if (partialText.contains("stop opnemen")) {
+        String commands = partialText.toLowerCase().replaceAll(" ","");
+        if (commands.contains("stopopnemen")) {
             speech.stopListening();
             speech.destroy();
             partialText = partialText.replaceAll("stop opnemen", "");
             toggleButton.setChecked(false);
         }
-
+        else if(commands.contains("subjectief")){
+            SOEPStatus = SOEP.SUBJECTIEF;
+            partialText = partialText.replaceAll("subjectief", "");
+        }
+        else if(commands.contains("objectief")){
+            SOEPStatus = SOEP.OBJECTIEF;
+            partialText = partialText.replaceAll("objectief", "");
+        }
+        else if(commands.contains("evaluatie")){
+            SOEPStatus = SOEP.EVALUATIE;
+            partialText = partialText.replaceAll("evaluatie", "");
+        }
+        else if(commands.contains("plan")){
+            SOEPStatus = SOEP.PLAN;
+            partialText = partialText.replaceAll("plan", "");
+        }
+        setActiveSOEP();
+        switch (SOEPStatus){
+            case SUBJECTIEF:
+                subjectiefKopText.append("Actief");
+                subjectiefText.setText(subjectiefTotalText + partialText);
+                break;
+            case OBJECTIEF:
+                objectiefKopText.append("Actief");
+                objectiefText.setText(objectiefTotalText + partialText);
+                break;
+            case EVALUATIE:
+                evaluatieKopText.append("Actief");
+                evaluatieText.setText(evaluatieTotalText + partialText);
+                break;
+            case PLAN:
+                planKopText.append("Actief");
+                planText.setText(planTotalText + partialText);
+                break;
+            default:
+                break;
+        }
         returnedText.setText(totalText + partialText);
+    }
+
+    public void setActiveSOEP(){
+        subjectiefKopText.setText("Subjectief: ");
+        objectiefKopText.setText("Objectief: ");
+        evaluatieKopText.setText("Evaluatie: ");
+        planKopText.setText("Plan: ");
     }
 
     @Override
@@ -159,7 +237,23 @@ public class SpeechActivity extends Activity implements RecognitionListener {
     @Override
     public void onResults(Bundle results) {
         Log.i(LOG_TAG, "onResults");
-        totalText = (String)returnedText.getText()+" ";
+        totalText = returnedText.getText()+" ";
+        switch (SOEPStatus){
+            case SUBJECTIEF:
+                subjectiefTotalText = subjectiefText.getText()+" ";
+                break;
+            case OBJECTIEF:
+                objectiefTotalText = objectiefText.getText()+" ";
+                break;
+            case EVALUATIE:
+                evaluatieTotalText = evaluatieText.getText()+" ";
+                break;
+            case PLAN:
+                planTotalText = planText.getText()+" ";
+                break;
+            default:
+                break;
+        }
         speech.destroy();
         listen();
     }
@@ -206,8 +300,10 @@ public class SpeechActivity extends Activity implements RecognitionListener {
         return message;
     }
 
-    public void setSpeechText(String speechText){
+    public void setSpeechText(String[] speechText){
         ((Ecd)this.getApplication()).setSpeechText(speechText);
-        Log.i("Speechtext",((Ecd)this.getApplication()).getSpeechText());
+        for(String s:allText){
+            Log.i("speechText",s);
+        }
     }
 }

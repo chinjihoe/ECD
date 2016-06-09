@@ -48,10 +48,10 @@ public class DossierActivity extends AppCompatActivity {
 
         Toolbar toolbar=(Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        try{
-            getSupportActionBar().setTitle(((Ecd)this.getApplication()).getEmployeeJSON().getString("name"));
-        }
-        catch (JSONException e){
+
+        try {
+            getSupportActionBar().setTitle(((Ecd) this.getApplication()).getEmployeeJSON().getString("name"));
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -227,6 +227,13 @@ public class DossierActivity extends AppCompatActivity {
         progressDialog.hide();
         progressDialog.dismiss();
         super.onStart();
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        //Hier moet de activity opnieuw alle updatebare data ophalen. Bijvoorbeeld: recenteJournaal data
+        //get recenteJournaal from server
     }
 
 }

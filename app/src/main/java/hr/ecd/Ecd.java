@@ -9,7 +9,7 @@ import org.json.JSONObject;
  */
 public class Ecd extends Application{
     private boolean debugging = false;
-    private String speechText = "";
+    private String[] speechText;
     private int accountId = 0;
     private JSONObject employeeJSON;
 
@@ -19,8 +19,8 @@ public class Ecd extends Application{
         return debugging;
     }
 
-    public void setSpeechText(String speechText){this.speechText = speechText;}
-    public String getSpeechText(){
+    public void setSpeechText(String[] speechText){this.speechText = speechText;}
+    public String[] getSpeechText(){
         return speechText;
     }
 
@@ -29,5 +29,6 @@ public class Ecd extends Application{
 
     public void setEmployeeJSON(JSONObject JSON){this.employeeJSON = JSON;}
     public JSONObject getEmployeeJSON(){return this.employeeJSON;}
+
 
 }
