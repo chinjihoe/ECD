@@ -25,10 +25,8 @@
         </activity>
         <activity android:name=".MainActivity" />
         <activity android:name=".LoginActivity" />
-        <activity
-            android:name=".DossierActivity"
-            />
-        <activity android:name=".SpeechActivity" />
+        <activity android:name=".DossierActivity"/>
+        <activity android:name=".SpeechActivity" android:screenOrientation="portrait"/>
         <activity android:name=".NFCActivity" />
     </application>
 
