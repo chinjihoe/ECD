@@ -74,7 +74,6 @@ public class LoginActivity extends AppCompatActivity{
 
     private void loginRequest(String username, String password){
         try {
-
             JSONObject jsonBody = new JSONObject();
             jsonBody.put("username", username);
             jsonBody.put("password", password);
@@ -85,29 +84,42 @@ public class LoginActivity extends AppCompatActivity{
                 public void onResponse(JSONObject response) {
                     try{
                         String loginSuccess = response.getString("login");
-                        if(loginSuccess=="true")
-                            startActivity(new Intent(LoginActivity.this, NFCActivity.class));
+                        if(loginSuccess=="true"){
+                            setAccountId(response.getInt("id"));
+                            getAccountInfo(response.getInt("id"));
+                        }
                         else
                             loginToast("Login Failed");
                     }
                     catch (JSONException e){
-
+                        e.printStackTrace();
                     }
-
                 }
             });
-
-
         }
         catch (JSONException e){
             e.printStackTrace();
         }
     }
 
-
-
-    protected void loginToast(String text){
-        Toast.makeText(this , text,Toast.LENGTH_LONG).show();
+    private void getAccountInfo(int accountId){
+        try {
+            Api api = new Api();
+            api.request(this, "/employee/"+accountId,null, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    setEmployeeJSON(response);
+                    startActivity(new Intent(LoginActivity.this, NFCActivity.class));
+                }
+            });
+        }
+        catch (JSONException e){
+            e.printStackTrace();
+        }
     }
+
+    protected void loginToast(String text){Toast.makeText(this , text,Toast.LENGTH_LONG).show();}
+    private void setAccountId(int accountId){((Ecd)this.getApplication()).setAccountId(accountId);}
+    private void setEmployeeJSON(JSONObject json){((Ecd)this.getApplication()).setEmployeeJSON(json);}
 }
 
