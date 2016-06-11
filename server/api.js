@@ -40,7 +40,8 @@ server.post('/login', Endpoint.login);
 server.post('/logout', Endpoint.logout);
 
 //Update client information
-server.post('/activity', Endpoint.addActivity);
+server.post('/addactivity', Endpoint.addActivity);
+server.post('/upactivity', Endpoint.updateActivity);
 
 
 

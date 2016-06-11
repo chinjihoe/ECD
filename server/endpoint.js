@@ -1,22 +1,25 @@
 var mysql = require('mysql');
 var dateFormat = require('dateformat');
 
-var db = mysql.createConnection({
+var getConnection = function () {
+	return mysql.createConnection({
 		host : 'localhost',
 		user : 'root',
 		password : 'careniet',
 		database : 'mydb'
 	});
+};
 
 module.exports = {
 
 	getClient : function (req, res, next) {
+		var db = getConnection();
 		console.log('getClients aangeroepen');
 		if (!req.params.id) {
 			errorReceived(140, "clientId parameter cannot be null", res);
 			res.end();
 		}
-		db.query('SELECT COUNT(*) as id from clients WHERE id =?', [req.params.id] , function (err, rows, fields) {
+		db.query('SELECT COUNT(*) as id from clients WHERE id =?', [req.params.id], function (err, rows, fields) {
 			if (err) {
 				errorReceived(500, err, res);
 			}
@@ -25,7 +28,7 @@ module.exports = {
 				res.end();
 			}
 		});
-		db.query('SELECT * FROM clients WHERE id =?', [req.params.id] , function (err, rows, fields) {
+		db.query('SELECT * FROM clients WHERE id =?', [req.params.id], function (err, rows, fields) {
 			if (err) {
 				errorReceived(500, err, res);
 			}
@@ -35,7 +38,7 @@ module.exports = {
 					'surname' : rows[0].surname,
 					'phonenumber' : rows[0].phonenumber,
 					'email' : rows[0].email,
-					'birthdate' : dateFormat(rows[0].birthdate,"yyyy-mm-dd"),
+					'birthdate' : dateFormat(rows[0].birthdate, "yyyy-mm-dd"),
 					'room' : rows[0].room,
 					'martial' : rows[0].martial,
 					'weight' : rows[0].weight,
@@ -44,15 +47,17 @@ module.exports = {
 				}))
 			res.end();
 		});
+		db.end();
 	},
 
 	getEmployee : function (req, res, next) {
+		var db = getConnection();
 		console.log('getEmployees aangeroepen');
 		if (!req.params.id) {
 			errorReceived(150, "employeeId parameter cannot be null", res);
 			res.end();
 		}
-		db.query('SELECT COUNT(*) as id from employees WHERE id =?', [req.params.id] , function (err, rows, fields) {
+		db.query('SELECT COUNT(*) as id from employees WHERE id =?', [req.params.id], function (err, rows, fields) {
 			if (err) {
 				errorReceived(500, err, res);
 			}
@@ -61,7 +66,7 @@ module.exports = {
 				res.end();
 			}
 		});
-		db.query('SELECT * FROM employees WHERE id =?', [req.params.id] , function (err, rows, fields) {
+		db.query('SELECT * FROM employees WHERE id =?', [req.params.id], function (err, rows, fields) {
 			if (err) {
 				errorReceived(500, err, res);
 			}
@@ -79,41 +84,45 @@ module.exports = {
 				}))
 			res.end();
 		});
+		db.end();
 	},
 
 	getActivity : function (req, res, next) {
+		var db = getConnection();
 		console.log('getActivity aangeroepen');
 		if (!req.params.id) {
 			errorReceived(160, "activityId parameter cannot be null", res);
 			res.end();
 		}
-		db.query('SELECT COUNT(*) as id from activities WHERE id =?', [req.params.id], function (err, rows, fields) {
+		db.query('SELECT COUNT(*) as id from activities WHERE client_id =?', [req.params.id], function (err, rows, fields) {
+			console.log(rows);
 			if (err) {
 				errorReceived(500, err, res);
 			}
 			if (rows[0].id == 0) {
-				errorReceived(161, "The record with the specified id(s) does not exist", res);
+				errorReceived(161, "The record(s) with the specified id(s) does not exist", res);
 				res.end();
 			}
 		});
-		db.query('SELECT * FROM activities WHERE id =? ', [req.params.id], function (err, rows, fields) {
+		db.query('SELECT * FROM activities WHERE client_id = ?;', [req.params.id], function (err, rows, fields) {
 			if (err) {
 				errorReceived(500, err, res);
 			}
-			res.write(
-				JSON.stringify({
-					'account_id' : rows[0].account_id,
-					'client_id' : rows[0].client_id,
-					'symptom' : rows[0].symptom,
-					'cause' : rows[0].cause,
-					'dicease' : rows[0].dicease,
-					'medicine' : rows[0].medicine
-				}))
-			res.end();
+			ids = Array()
+				for (row in rows) {
+					ids[row] = rows[row];
+				}
+				res.write(
+					JSON.stringify({
+						activities : ids
+					}))
+				res.end();
 		});
+		db.end();
 	},
 
 	getAdmins : function (req, res, next) {
+		var db = getConnection();
 		console.log('getAdmins aangeroepen');
 		db.query('SELECT id FROM accounts WHERE isAdmin = TRUE', function (err, rows, fields) {
 			if (err) {
@@ -128,9 +137,11 @@ module.exports = {
 					}))
 				res.end();
 		});
+		db.end();
 	},
 
 	login : function (req, res, next) {
+		var db = getConnection();
 		console.log('login aangeroepen');
 
 		db.query('SELECT COUNT(*) as login, employees.id as id FROM accounts, employees WHERE username = ? AND password = ? AND employees.accounts_id = accounts.id', [req.params.username, req.params.password], function (err, rows, fields) {
@@ -153,6 +164,7 @@ module.exports = {
 				res.end();
 			}
 		});
+		db.end();
 	},
 
 	logout : function (req, res, next) {
@@ -162,16 +174,17 @@ module.exports = {
 	},
 
 	addActivity : function (req, res, next) {
+		var db = getConnection();
 		console.log('addActivity aangeroepen')
-        
-        var insert = {
-            'account_id' : req.params.account_id,
-            'client_id' : req.params.client_id,
-            'symptom' : req.params.symptom,
-            'cause': req.params.cause,
-            'disease': req.params.disease,
-            'medicine': req.params.medicine,            
-        };
+
+		var insert = {
+			'account_id' : req.params.account_id,
+			'client_id' : req.params.client_id,
+			'subjective' : req.params.subjective,
+			'objective' : req.params.objective,
+			'evaluation' : req.params.evaluation,
+			'plan' : req.params.plan
+		};
 
 		db.query("INSERT INTO activities SET ?, date=NOW() ", insert, function (err, results) {
 			if (err) {
@@ -182,6 +195,31 @@ module.exports = {
 				res.end();
 			}
 		});
+		db.end();
+	},
+
+	updateActivity : function (req, res, next) {
+		var db = getConnection();
+		console.log('updateActitiy aangeroepen')
+
+		var insert = {
+			'subjective' : req.params.subjective,
+			'objective' : req.params.objective,
+			'evaluation' : req.params.evaluation,
+			'plan' : req.params.plan,
+			'id' : req.params.id
+		};
+
+		db.query("UPDATE activities SET ? WHERE id= ?;", insert, function (err, results) {
+			if (err) {
+				console.log(err);
+				errorReceived(500, err, res);
+			} else {
+				console.log('Succes');
+				res.end();
+			}
+		});
+		db.end();
 	}
 };
 
