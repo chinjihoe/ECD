@@ -40,6 +40,7 @@ public class DossierActivity extends AppCompatActivity {
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
     private String mActivityTitle;
+    private Button nieuwJournaalButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +70,14 @@ public class DossierActivity extends AppCompatActivity {
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Doe normaal man");
         progressDialog.show();
+
+        nieuwJournaalButton = (Button) findViewById(R.id.nieuwJournaal);
+        nieuwJournaalButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(DossierActivity.this,SpeechActivity.class));
+            }
+        });
 
         Intent intent = getIntent();
 

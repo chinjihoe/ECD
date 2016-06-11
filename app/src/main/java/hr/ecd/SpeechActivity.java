@@ -11,6 +11,7 @@ import android.speech.SpeechRecognizer;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.util.Log;
 import android.view.Gravity;
@@ -25,7 +26,7 @@ import android.widget.ToggleButton;
 import android.media.AudioManager;
 
 public class SpeechActivity extends Activity implements RecognitionListener {
-
+    private Toolbar toolbar;
     private TextView returnedText;
     private TextView subjectiefText;
     private TextView objectiefText;
@@ -68,6 +69,9 @@ public class SpeechActivity extends Activity implements RecognitionListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.speech);
+        toolbar=(Toolbar)findViewById(R.id.toolbar);
+        toolbar.setTitle("Nieuw journaal");
+
         audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
         returnedText = (TextView) findViewById(R.id.speechTextView);
         subjectiefText = (TextView) findViewById(R.id.subjectiefText);
@@ -133,7 +137,6 @@ public class SpeechActivity extends Activity implements RecognitionListener {
                 alertDialog();
             }
         });
-
         SOEPStatus = SOEP.SUBJECTIEF;
     }
 
@@ -178,7 +181,6 @@ public class SpeechActivity extends Activity implements RecognitionListener {
             }
         });
         builder.show();
-
     }
 
     @Override

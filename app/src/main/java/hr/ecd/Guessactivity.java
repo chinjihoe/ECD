@@ -15,7 +15,7 @@ public class GuessActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guess);
 
-        String text = ((Ecd)getApplication()).getSpeechText();
+        String text = ((Ecd)getApplication()).getSpeechText()[0];
 
         String[] words = text.replaceAll("[^A-Za-z]", "").toLowerCase().split(" ");
         Arrays.sort(words);

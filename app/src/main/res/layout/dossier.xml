@@ -245,19 +245,14 @@
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="New Button"
-                    android:id="@+id/button"
+                    android:text="Nieuw journaal"
+                    android:id="@+id/nieuwJournaal"
                     android:layout_below="@+id/relativeLayout2"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true" />
 
-
             </RelativeLayout>
         </ScrollView>
-
-
     </android.support.v4.widget.DrawerLayout>
-
-
 </LinearLayout>
 
