@@ -151,11 +151,9 @@ public class DossierActivity extends AppCompatActivity {
                 mDrawerLayout.closeDrawer(mDrawerList);
                 switch (position){
                     case 0:
-                        break;
-                    case 1:
                         startActivity(new Intent(DossierActivity.this,SpeechActivity.class));
                         break;
-                    case 2:
+                    case 1:
                         startActivity(new Intent(DossierActivity.this, GuessActivity.class));
                         break;
                     default:
@@ -166,7 +164,7 @@ public class DossierActivity extends AppCompatActivity {
     }
 
     private void addDrawerItems() {
-        String[] osArray = { "Recent activities","Record activities", "Relevant information" };
+        String[] osArray = { "Record activities", "Relevant information" };
         mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, osArray);
         mDrawerList.setAdapter(mAdapter);
     }
