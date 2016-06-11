@@ -40,6 +40,7 @@ public class DossierActivity extends AppCompatActivity {
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
     private String mActivityTitle;
+    private Button nieuwJournaalButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +70,14 @@ public class DossierActivity extends AppCompatActivity {
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Doe normaal man");
         progressDialog.show();
+
+        nieuwJournaalButton = (Button) findViewById(R.id.nieuwJournaal);
+        nieuwJournaalButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(DossierActivity.this,SpeechActivity.class));
+            }
+        });
 
         Intent intent = getIntent();
 
@@ -151,11 +160,9 @@ public class DossierActivity extends AppCompatActivity {
                 mDrawerLayout.closeDrawer(mDrawerList);
                 switch (position){
                     case 0:
-                        break;
-                    case 1:
                         startActivity(new Intent(DossierActivity.this,SpeechActivity.class));
                         break;
-                    case 2:
+                    case 1:
                         startActivity(new Intent(DossierActivity.this, GuessActivity.class));
                         break;
                     default:
@@ -166,7 +173,7 @@ public class DossierActivity extends AppCompatActivity {
     }
 
     private void addDrawerItems() {
-        String[] osArray = { "Recent activities","Record activities", "Relevant information" };
+        String[] osArray = { "Record activities", "Relevant information" };
         mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, osArray);
         mDrawerList.setAdapter(mAdapter);
     }
