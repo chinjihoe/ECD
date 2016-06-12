@@ -343,8 +343,6 @@ public class DossierActivity extends AppCompatActivity {
     @Override
     protected void onResume(){
         super.onResume();
-        //Hier moet de activity opnieuw alle updatebare data ophalen. Bijvoorbeeld: recenteJournaal data
-        //get recenteJournaal from server
         updateRecentJournal();
     }
 

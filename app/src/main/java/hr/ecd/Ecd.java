@@ -28,7 +28,7 @@ public class Ecd extends Application{
     public void setAccountId(int accountId){this.accountId = accountId;}
     public int getAccountId(){return accountId;}
 
-    public void setClientId(int accountId){this.clientId = clientId;}
+    public void setClientId(int clientId){this.clientId = clientId;}
     public int getClientId(){return clientId;}
 
     public void setEmployeeJSON(JSONObject JSON){this.employeeJSON = JSON;}

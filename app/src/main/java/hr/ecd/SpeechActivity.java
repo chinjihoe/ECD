@@ -163,6 +163,7 @@ public class SpeechActivity extends Activity implements RecognitionListener {
     }
 
     public void alertDialog(){
+        toggleButton.setChecked(false);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Afronden?");
 
@@ -171,12 +172,12 @@ public class SpeechActivity extends Activity implements RecognitionListener {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
+                toggleButton.setChecked(true);
             }
         });
         builder.setNegativeButton("Ja", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                toggleButton.setChecked(false);
                 addActivity();
                 dialog.cancel();
                 finish();
@@ -231,7 +232,7 @@ public class SpeechActivity extends Activity implements RecognitionListener {
             });
         }
         catch (Exception e){
-
+            e.printStackTrace();
         }
     }
 
