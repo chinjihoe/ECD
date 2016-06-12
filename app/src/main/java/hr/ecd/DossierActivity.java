@@ -41,6 +41,7 @@ public class DossierActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private String mActivityTitle;
     private Button nieuwJournaalButton;
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +80,7 @@ public class DossierActivity extends AppCompatActivity {
             }
         });
 
-        Intent intent = getIntent();
+        intent = getIntent();
 
         Api api = new Api();
         try {
@@ -242,8 +243,20 @@ public class DossierActivity extends AppCompatActivity {
     @Override
     protected void onResume(){
         super.onResume();
-        //Hier moet de activity opnieuw alle updatebare data ophalen. Bijvoorbeeld: recenteJournaal data
         //get recenteJournaal from server
+        Api api = new Api();
+        String userId = intent.getStringExtra("userId");
+        try {
+            api.request(this, "/client/" + userId, null, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    fillClientData(response);
+                }
+            });
+        }
+        catch(JSONException e) {
+            e.printStackTrace();
+        }
     }
 
 }
