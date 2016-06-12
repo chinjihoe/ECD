@@ -88,6 +88,7 @@ public class LoginActivity extends AppCompatActivity{
                             Integer errorCode = response.getInt("code");
                             switch (Api.Errors.fromInteger(errorCode)) {
                                 case USER_NOT_FOUND:
+                                    loginToast("User not found");
                                     break;
                                 case NO_RECORDS_FOUND:
                                     break;
