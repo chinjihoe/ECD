@@ -114,7 +114,7 @@ public class DossierActivity extends AppCompatActivity {
                 achternaamText = (TextView)findViewById(R.id.achternaamText),
                 geboorteDatumText = (TextView)findViewById(R.id.geboortedatumText),
                 kamerText = (TextView)findViewById(R.id.kamernrText),
-                attentieText = (TextView)findViewById(R.id.attentieText),
+                attentieText = (TextView)findViewById(R.id.extraInformatieText),
                 telefoonNummerText = (TextView)findViewById(R.id.telnrText),
                 emailText = (TextView)findViewById(R.id.emailText),
                 burgerlijkestaatText = (TextView)findViewById(R.id.burgelijkestaatText),
@@ -215,7 +215,7 @@ public class DossierActivity extends AppCompatActivity {
     }
 
     private void setJournalChanges(JSONObject object) {
-        TextView journal = (TextView)findViewById(R.id.nieuwJournaal);
+        TextView journal = (TextView)findViewById(R.id.recenteJournaalText);
         journal.setText("");
         try {
             JSONArray activities = object.getJSONArray("activities");
