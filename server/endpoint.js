@@ -66,7 +66,7 @@ module.exports = {
 				res.end();
 			}
 		});
-		db.query('SELECT * FROM employees WHERE id =?', [req.params.id], function (err, rows, fields) {
+		db.query('SELECT * FROM employees WHERE account_id =?', [req.params.id], function (err, rows, fields) {
 			if (err) {
 				errorReceived(500, err, res);
 			}
@@ -104,7 +104,7 @@ module.exports = {
 				res.end();
 			}
 		});
-		db.query('SELECT * FROM activities WHERE client_id = ?;', [req.params.id], function (err, rows, fields) {
+		db.query('SELECT * FROM activities WHERE client_id = ? ORDER BY id DESC;', [req.params.id], function (err, rows, fields) {
 			if (err) {
 				errorReceived(500, err, res);
 			}
@@ -142,15 +142,15 @@ module.exports = {
 
 	login : function (req, res, next) {
 		var db = getConnection();
-		console.log('login aangeroepen');
+		console.log('login aangeroepen', req.params.password, req.params.username);
 
-		db.query('SELECT COUNT(*) as login, employees.id as id FROM accounts, employees WHERE username = ? AND password = ? AND employees.accounts_id = accounts.id', [req.params.username, req.params.password], function (err, rows, fields) {
+		db.query('SELECT employees.id as id FROM accounts, employees WHERE username = ? AND password = ? AND employees.account_id = accounts.id', [req.params.username, req.params.password], function (err, rows, fields) {
 			if (err) {
 				errorReceived(500, err, res);
 			}
 			console.log(rows);
 
-			if (rows[0].login) {
+			if (rows.length > 0) {
 				res.write(JSON.stringify({
 						'login' : true,
 						'id' : rows[0].id
@@ -191,8 +191,11 @@ module.exports = {
 				console.log(err);
 				errorReceived(500, err, res);
 			} else {
-				console.log('Succes');
-				res.end();
+				res.write(
+				JSON.stringify({
+					'success' : true
+				}));
+			res.end();
 			}
 		});
 		db.end();
@@ -215,8 +218,11 @@ module.exports = {
 				console.log(err);
 				errorReceived(500, err, res);
 			} else {
-				console.log('Succes');
-				res.end();
+				res.write(
+				JSON.stringify({
+					'success' : true
+				}));
+			res.end();
 			}
 		});
 		db.end();

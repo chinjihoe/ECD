@@ -5,7 +5,7 @@ var server = restify.createServer({name: 'Emerging Technologies'});
 server.use(restify.bodyParser());
 
 function setPort(){
-	p = process.argv[2];
+	var p = process.argv[2];
 
 	if(typeof p == 'undefined'){
 		console.log("Vergeet geen server port mee te geven. Henkie.");
@@ -28,8 +28,8 @@ server.listen(port, function(){
 
 //Returns x information on id request
 server.get('/client/:id', Endpoint.getClient);
-server.get('/employee/:id', Endpoint.getEmployee)
-server.get('/activity/:id', Endpoint.getActivity)
+server.get('/client/:id/activities', Endpoint.getActivity);
+server.get('/employee/:id', Endpoint.getEmployee);
 
 //Returns all admins
 server.get('/accounts/admin', Endpoint.getAdmins);
@@ -41,7 +41,8 @@ server.post('/logout', Endpoint.logout);
 
 //Update client information
 server.post('/addactivity', Endpoint.addActivity);
-server.post('/upactivity', Endpoint.updateActivity);
+server.post('/updateactivity', Endpoint.updateActivity);
+
 
 
 
