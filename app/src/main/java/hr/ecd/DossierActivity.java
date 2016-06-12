@@ -21,7 +21,6 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
@@ -96,7 +95,8 @@ public class DossierActivity extends AppCompatActivity {
     private void getClientData() {
         Api api = new Api();
         try {
-            api.request(this, "/client/" + this.userId, null, new Response.Listener<JSONObject>() {
+            String userId = intent.getStringExtra("userId");
+            api.request(this, "/client/" + userId, null, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
                     fillClientData(response);
@@ -106,6 +106,7 @@ public class DossierActivity extends AppCompatActivity {
         catch(JSONException e) {
             e.printStackTrace();
         }
+
     }
 
     private void fillClientData(JSONObject response) {
@@ -160,7 +161,7 @@ public class DossierActivity extends AppCompatActivity {
             --a;
         }
         if(a < 0)
-           return 0;
+            throw new IllegalArgumentException("Age < 0");
         return a;
     }
 
@@ -214,71 +215,8 @@ public class DossierActivity extends AppCompatActivity {
         mDrawerLayout.addDrawerListener(mDrawerToggle);
     }
 
-    private void setJournalChanges(JSONObject object) {
-        TextView journal = (TextView)findViewById(R.id.nieuwJournaal);
-        journal.setText("");
-        try {
-            JSONArray activities = object.getJSONArray("activities");
-            Integer iterations = activities.length();
-            for(int i = 0; i < iterations; i++) {
-                JSONObject row = activities.getJSONObject(i);
-                Integer id = row.getInt("id");
-                Integer accountId = row.getInt("account_id");
-                Integer clientId = row.getInt("client_id");
-                String subjective = row.getString("subjective");
-                String objective = row.getString("objective");
-                String evaluation = row.getString("evaluation");
-                String plan = row.getString("plan");
-                String date = row.getString("date");
-
-                journal.append("S:" + " " + subjective + "\n" +
-                        "O: " + " " + objective + "\n" +
-                        "E: " + " " + evaluation + "\n" +
-                        "P: " + " " + plan + "\n" +
-                        date);
-                journal.append("\n\n");
-            }
-        }
-        catch(JSONException e) {
-            e.printStackTrace();
-        }
-
-    }
-
     private void updateRecentJournal() {
-        Api api = new Api();
-            try {
-            api.request(this, "/client/" + this.userId + "/activities", null, new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
-                    try {
-                        if (!response.isNull("error")) {
 
-                            switch (Api.Errors.fromInteger(response.getInt("error"))) {
-                                case USER_NOT_FOUND:
-                                    break;
-                                case NO_RECORDS_FOUND:
-                                    Toast.makeText(DossierActivity.this, "No activities found!", Toast.LENGTH_SHORT).show();
-                                    break;
-                                case ERROR_NOT_FOUND:
-                                    break;
-                                case FOUR_O_FOUR:
-                                    break;
-                            }
-                        }
-                        else {
-                            setJournalChanges(response);
-                        }
-                    }
-                    catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-        }
-        catch(JSONException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
