@@ -203,6 +203,10 @@ public class DossierActivity extends AppCompatActivity {
         mDrawerLayout.addDrawerListener(mDrawerToggle);
     }
 
+    private void updateRecentJournal() {
+
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -244,6 +248,7 @@ public class DossierActivity extends AppCompatActivity {
         super.onResume();
         //Hier moet de activity opnieuw alle updatebare data ophalen. Bijvoorbeeld: recenteJournaal data
         //get recenteJournaal from server
+
     }
 
 }

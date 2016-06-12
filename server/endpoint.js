@@ -3,10 +3,11 @@ var dateFormat = require('dateformat');
 
 var getConnection = function () {
 	return mysql.createConnection({
-		host : 'localhost',
-		user : 'root',
-		password : 'careniet',
-		database : 'mydb'
+		host : '80.57.4.176',
+		user : 'emerging',
+		password : 'rnpxt45n',
+		database : 'mydb',
+		port: 3306
 	});
 };
 
@@ -117,6 +118,16 @@ module.exports = {
 						activities : ids
 					}))
 				res.end();
+		});
+		db.end();
+	},
+
+	getActivities: function (req, res, next) {
+		var db = getConnection();
+		
+		db.query({ sql: 'SELECT id, account_id, client_id, subjective, objective, evaluation, plan, date FROM activities', nestTables: true}, function(err, results) {
+			res.write(JSON.stringify(results));
+			res.end();
 		});
 		db.end();
 	},
