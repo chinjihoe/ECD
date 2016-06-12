@@ -26,7 +26,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.concurrent.BlockingQueue;
 
@@ -223,7 +225,7 @@ public class DossierActivity extends AppCompatActivity {
             for(int i = 0; i < iterations; i++) {
                 JSONObject row = activities.getJSONObject(i);
                 Integer id = row.getInt("id");
-                Integer accountId = row.getInt("account_id");
+                final Integer accountId = row.getInt("account_id");
                 Integer clientId = row.getInt("client_id");
                 String subjective = row.getString("subjective");
                 String objective = row.getString("objective");
@@ -235,8 +237,30 @@ public class DossierActivity extends AppCompatActivity {
                         "O: " + " " + objective + "\n" +
                         "E: " + " " + evaluation + "\n" +
                         "P: " + " " + plan + "\n" +
-                        date);
+                        date + " :employee" + accountId);
                 journal.append("\n\n");
+
+                Api api = new Api();
+
+                // Get the Employee's name
+                api.request(this, "/employee/" + accountId, null, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Character nameLetter = response.getString("name").charAt(0);
+                            String surname = response.getString("surname");
+                            TextView journal = (TextView)findViewById(R.id.recenteJournaalText);
+                            String text = journal.getText().toString();
+                            text = text.replaceAll(":employee" + accountId, nameLetter + ". " + surname);
+                            journal.setText(text);
+                        }
+                        catch(JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
             }
         }
         catch(JSONException e) {
