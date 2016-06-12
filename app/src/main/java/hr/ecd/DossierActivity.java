@@ -95,7 +95,6 @@ public class DossierActivity extends AppCompatActivity {
     private void getClientData() {
         Api api = new Api();
         try {
-            String userId = intent.getStringExtra("userId");
             api.request(this, "/client/" + userId, null, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
