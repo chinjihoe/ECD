@@ -34,7 +34,7 @@ public class NFCActivity extends AppCompatActivity {
         }
 
         if(((Ecd)this.getApplication()).getDebugging()) {
-            Integer userId = 1;
+            Integer userId = 70;
             Intent intent = new Intent(this, DossierActivity.class);
             intent.putExtra("userId", userId.toString());
 
