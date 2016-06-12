@@ -28,8 +28,9 @@ server.listen(port, function(){
 
 //Returns x information on id request
 server.get('/client/:id', Endpoint.getClient);
-server.get('/employee/:id', Endpoint.getEmployee)
-server.get('/activity/:id', Endpoint.getActivity)
+server.get('/employee/:id', Endpoint.getEmployee);
+server.get('/activity/:id', Endpoint.getActivity);
+server.get('/activities', Endpoint.getActivities);
 
 //Returns all admins
 server.get('/accounts/admin', Endpoint.getAdmins);

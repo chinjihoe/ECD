@@ -25,6 +25,8 @@ public class Api {
 
     public enum Errors {
         USER_NOT_FOUND,
+        NO_RECORDS_FOUND,
+        ERROR_NOT_FOUND,
         FOUR_O_FOUR;
 
         private int num;
@@ -35,14 +37,15 @@ public class Api {
                     return USER_NOT_FOUND;
                 case 404:
                     return FOUR_O_FOUR;
+                case 161:
+                    return NO_RECORDS_FOUND;
             }
-            return null;
+            return ERROR_NOT_FOUND;
         }
 
     }
 
     private final String rootUrl = "http://80.57.4.176:523";
-    private JSONObject apiResponse = null;
 
 
     public void request(Context context, String apiUrl, JSONObject jsonBody, final Response.Listener<JSONObject> callback) throws JSONException {

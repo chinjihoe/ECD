@@ -204,6 +204,10 @@ public class DossierActivity extends AppCompatActivity {
         mDrawerLayout.addDrawerListener(mDrawerToggle);
     }
 
+    private void updateRecentJournal() {
+
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -257,6 +261,7 @@ public class DossierActivity extends AppCompatActivity {
         catch(JSONException e) {
             e.printStackTrace();
         }
+
     }
 
 }

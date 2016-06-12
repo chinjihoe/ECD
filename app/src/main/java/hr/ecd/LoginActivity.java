@@ -83,6 +83,20 @@ public class LoginActivity extends AppCompatActivity{
                 @Override
                 public void onResponse(JSONObject response) {
                     try{
+
+                        if(!response.isNull("code")) {
+                            Integer errorCode = response.getInt("code");
+                            switch (Api.Errors.fromInteger(errorCode)) {
+                                case USER_NOT_FOUND:
+                                    break;
+                                case NO_RECORDS_FOUND:
+                                    break;
+                                case ERROR_NOT_FOUND:
+                                    break;
+                                case FOUR_O_FOUR:
+                                    break;
+                            }
+                        }
                         String loginSuccess = response.getString("login");
                         if(loginSuccess=="true"){
                             setAccountId(response.getInt("id"));
