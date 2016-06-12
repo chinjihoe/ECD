@@ -335,7 +335,6 @@ public class DossierActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
-
         progressDialog.hide();
         progressDialog.dismiss();
         super.onStart();
@@ -346,7 +345,7 @@ public class DossierActivity extends AppCompatActivity {
         super.onResume();
         //Hier moet de activity opnieuw alle updatebare data ophalen. Bijvoorbeeld: recenteJournaal data
         //get recenteJournaal from server
-        //updateRecentJournal();
+        updateRecentJournal();
     }
 
 }

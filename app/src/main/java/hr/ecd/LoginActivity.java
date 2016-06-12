@@ -43,7 +43,6 @@ public class LoginActivity extends AppCompatActivity{
         ((Ecd)this.getApplication()).setDebugging(true);
         //
 
-
         Toolbar toolbar=(Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
