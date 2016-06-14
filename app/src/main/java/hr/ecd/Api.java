@@ -27,7 +27,8 @@ public class Api {
         USER_NOT_FOUND,
         NO_RECORDS_FOUND,
         ERROR_NOT_FOUND,
-        FOUR_O_FOUR;
+        FOUR_O_FOUR,
+        ECONNREFUSED;
 
         private int num;
 
@@ -39,6 +40,8 @@ public class Api {
                     return FOUR_O_FOUR;
                 case 161:
                     return NO_RECORDS_FOUND;
+                case 500:
+                    return ECONNREFUSED;
             }
             return ERROR_NOT_FOUND;
         }

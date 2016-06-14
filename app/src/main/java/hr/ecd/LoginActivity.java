@@ -95,6 +95,9 @@ public class LoginActivity extends AppCompatActivity{
                                     break;
                                 case FOUR_O_FOUR:
                                     break;
+                                case ECONNREFUSED:
+                                    loginToast("Connection refused");
+                                    break;
                             }
                         }
                         String loginSuccess = response.getString("login");

@@ -12,14 +12,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.text.InputType;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -45,6 +42,7 @@ public class SpeechActivity extends Activity implements RecognitionListener {
     private TextView SOEPText;
 
     private Button afrondenButton;
+    private Button annulerenButton;
     private Button vorigeButton;
     private Button volgendeButton;
     private ToggleButton toggleButton;
@@ -91,6 +89,7 @@ public class SpeechActivity extends Activity implements RecognitionListener {
         vorigeButton = (Button) findViewById(R.id.vorigeButton);
         volgendeButton = (Button) findViewById(R.id.volgendeButton);
         afrondenButton = (Button) findViewById(R.id.afrondenButton);
+        annulerenButton = (Button) findViewById(R.id.annulerenButton);
         progressBar = (ProgressBar) findViewById(R.id.speechProgressBar);
         toggleButton = (ToggleButton) findViewById(R.id.speechToggleButton);
         progressBar.setVisibility(View.VISIBLE);
@@ -135,7 +134,13 @@ public class SpeechActivity extends Activity implements RecognitionListener {
         afrondenButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                alertDialog();
+                afrondenAlertDialog();
+            }
+        });
+        annulerenButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
         SOEPStatus = SOEP.SUBJECTIEF;
@@ -159,10 +164,10 @@ public class SpeechActivity extends Activity implements RecognitionListener {
 
     @Override
     public void onBackPressed() {
-        alertDialog();
+        afrondenAlertDialog();
     }
 
-    public void alertDialog(){
+    public void afrondenAlertDialog(){
         toggleButton.setChecked(false);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Afronden?");
@@ -182,6 +187,27 @@ public class SpeechActivity extends Activity implements RecognitionListener {
                 dialog.cancel();
                 finish();
 
+            }
+        });
+        builder.show();
+    }
+    public void annulerenAlertDialog(){
+        toggleButton.setChecked(false);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Annuleren?");
+
+        builder.setPositiveButton("Nee", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                toggleButton.setChecked(true);
+                dialog.cancel();
+            }
+        });
+        builder.setNegativeButton("Ja", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+                finish();
             }
         });
         builder.show();
