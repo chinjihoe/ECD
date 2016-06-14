@@ -75,7 +75,7 @@ public class DossierActivity extends AppCompatActivity {
         progressDialog = new ProgressDialog(this);
         progressDialog.setProgress(ProgressDialog.STYLE_HORIZONTAL);
         progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Doe normaal man");
+        progressDialog.setMessage("Gegevens aan het ophalen");
         progressDialog.show();
 
         nieuwJournaalButton = (Button) findViewById(R.id.nieuwJournaal);
@@ -101,6 +101,8 @@ public class DossierActivity extends AppCompatActivity {
             api.request(this, "/client/" + this.userId, null, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
+                    progressDialog.hide();
+                    progressDialog.dismiss();
                     fillClientData(response);
                 }
             });
@@ -233,11 +235,15 @@ public class DossierActivity extends AppCompatActivity {
                 String plan = row.getString("plan");
                 String date = row.getString("date");
 
+                String dateFormatted = date.split("T")[0];
+                String fullTime = (date.split("T")[1]);
+                String time = fullTime.split("\\.")[0];
+
                 journal.append("S:" + " " + subjective + "\n" +
                         "O: " + " " + objective + "\n" +
                         "E: " + " " + evaluation + "\n" +
                         "P: " + " " + plan + "\n" +
-                        date + " :employee" + accountId);
+                        dateFormatted + " " + time + " :employee" + accountId);
                 journal.append("\n\n");
 
                 Api api = new Api();
@@ -335,8 +341,7 @@ public class DossierActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
-        progressDialog.hide();
-        progressDialog.dismiss();
+
         super.onStart();
     }
 
