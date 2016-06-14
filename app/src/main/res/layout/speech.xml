@@ -41,82 +41,95 @@
         android:layout_above="@+id/tableRow"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Subjectief: Actief"
-        android:id="@+id/subjectiefKopText"
-        android:singleLine="true"
-        android:textColor="@color/Black"
-        android:textSize="20dp"
+    <ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/ScrollView01"
+        android:layout_width="fill_parent"
         android:layout_below="@+id/toolbar"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="-"
-        android:id="@+id/subjectiefText"
-        android:layout_below="@+id/subjectiefKopText" />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Objectief:"
-        android:id="@+id/objectiefKopText"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/subjectiefText"
-        android:singleLine="true"
-        android:textColor="@color/Black"
-        android:textSize="20dp" />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="-"
-        android:id="@+id/objectiefText"
-        android:layout_below="@+id/objectiefKopText"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Evaluatie:"
-        android:id="@+id/evaluatieKopText"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/objectiefText"
-        android:singleLine="true"
-        android:textColor="@color/Black"
-        android:textSize="20dp" />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="-"
-        android:id="@+id/evaluatieText"
-        android:layout_below="@+id/evaluatieKopText" />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Plan:"
-        android:id="@+id/planKopText"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/evaluatieText"
-        android:singleLine="true"
-        android:textColor="@color/Black"
-        android:textSize="20dp" />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="-"
-        android:id="@+id/planText"
-        android:layout_below="@+id/planKopText"/>
+        android:layout_height="match_parent"
+        android:layout_above="@+id/speechProgressBar">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Subjectief: Actief"
+                android:id="@+id/subjectiefKopText"
+                android:singleLine="true"
+                android:textColor="@color/Black"
+                android:textSize="20dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="-"
+                android:id="@+id/subjectiefText"
+                android:layout_below="@+id/subjectiefKopText" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Objectief:"
+                android:id="@+id/objectiefKopText"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/subjectiefText"
+                android:singleLine="true"
+                android:textColor="@color/Black"
+                android:textSize="20dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="-"
+                android:id="@+id/objectiefText"
+                android:layout_below="@+id/objectiefKopText"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Evaluatie:"
+                android:id="@+id/evaluatieKopText"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/objectiefText"
+                android:singleLine="true"
+                android:textColor="@color/Black"
+                android:textSize="20dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="-"
+                android:id="@+id/evaluatieText"
+                android:layout_below="@+id/evaluatieKopText" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Plan:"
+                android:id="@+id/planKopText"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/evaluatieText"
+                android:singleLine="true"
+                android:textColor="@color/Black"
+                android:textSize="20dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="-"
+                android:id="@+id/planText"
+                android:layout_below="@+id/planKopText"/>
+        </RelativeLayout>
+    </ScrollView>
+
 
     <TableRow
         android:layout_width="fill_parent"

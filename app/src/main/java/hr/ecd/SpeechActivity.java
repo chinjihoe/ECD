@@ -12,6 +12,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -318,41 +319,52 @@ public class SpeechActivity extends Activity implements RecognitionListener {
         partialText = matches.get(0);
         Log.i(LOG_TAG,"onPartialResults: "+partialText);
 
-        String commands = partialText.toLowerCase().replaceAll(" ","");
-        if (commands.contains("stopopnemen")) {
-            speech.stopListening();
-            speech.destroy();
-            partialText = partialText.replaceAll("stop opnemen", "");
-            toggleButton.setChecked(false);
-        }
-        else if(commands.contains("subjectief")){
-            SOEPStatus = SOEP.SUBJECTIEF;
-            partialText = partialText.replaceAll("subjectief", "");
-            changeSOEPStatus();
-            Log.i("SOEPStatus",SOEPStatus.toString());
+        String commands = partialText.toLowerCase();
+        Log.i("LENTH",""+commands.length());
+        boolean doChangeSOEPStatus = true;
 
-        }
-        else if(commands.contains("objectief")){
-            SOEPStatus = SOEP.OBJECTIEF;
-            partialText = partialText.replaceAll("objectief", "");
-            changeSOEPStatus();
-            Log.i("SOEPStatus",SOEPStatus.toString());
+        partialText = partialText.replaceAll(" commando", "");
+        partialText = partialText.replaceAll("Commando", "");
+        partialText = partialText.replaceAll("commando", "");
 
-        }
-        else if(commands.contains("evaluatie")){
-            SOEPStatus = SOEP.EVALUATIE;
-            partialText = partialText.replaceAll("evaluatie", "");
-            changeSOEPStatus();
-            Log.i("SOEPStatus",SOEPStatus.toString());
+        if(commands.length()>1 && commands.contains("commando") && commands.split(" ").length > 1){
+            Integer index = java.util.Arrays.asList(commands.split(" ")).indexOf("commando");
+            boolean stopped = false;
+            if((commands.split(" ").length-1) > index) {
+                String command = commands.split(" ")[index+1];
+                if (command.equals("stop")) {
+                    speech.stopListening();
+                    speech.destroy();
+                    toggleButton.setChecked(false);
+                    stopped = true;
+                } else if (command.equals("subjectief")) {
+                    SOEPStatus = SOEP.SUBJECTIEF;
 
-        }
-        else if(commands.contains("plan")){
-            SOEPStatus = SOEP.PLAN;
-            partialText = partialText.replaceAll("plan", "");
-            changeSOEPStatus();
-            Log.i("SOEPStatus",SOEPStatus.toString());
+                } else if (command.equals("objectief") || command.equals("objektiv") || command.equals("objektief")) {
+                    SOEPStatus = SOEP.OBJECTIEF;
 
+                } else if (command.equals("evaluatie")) {
+                    SOEPStatus = SOEP.EVALUATIE;
+
+                } else if (command.equals("plan")) {
+                    SOEPStatus = SOEP.PLAN;
+
+                } else
+                    doChangeSOEPStatus = false;
+
+                if (doChangeSOEPStatus) {
+                    changeSOEPStatus();
+                    Log.i("SOEPStatus", SOEPStatus.toString());
+                }
+                if(!stopped){
+                    partialText = partialText.replaceAll(command, "");
+                    speech.stopListening();
+                    speech.destroy();
+                    listen();
+                }
+            }
         }
+
         switch (SOEPStatus){
             case SUBJECTIEF:
                 SOEPText.setText(replaceSymbols(subjectiefTotalText+partialText));
@@ -369,9 +381,6 @@ public class SpeechActivity extends Activity implements RecognitionListener {
             default:
                 break;
         }
-        //SOEPText.setText((SOEPText.getText().toString().trim()).replaceAll("\\s+"," "));
-        //totalText.replaceAll(" punt",".").replaceAll(" vraagteken","?").replaceAll(" uitroepteken","!").replaceAll(" komma",",");
-        returnedText.setText(totalText+partialText);
     }
 
     public String replaceSymbols(String totalText){
@@ -388,22 +397,18 @@ public class SpeechActivity extends Activity implements RecognitionListener {
             case SUBJECTIEF:
                 SOEPText = subjectiefText;
                 subjectiefKopText.append("Actief");
-                //subjectiefText.setText(subjectiefTotalText + partialText);
                 break;
             case OBJECTIEF:
                 SOEPText = objectiefText;
                 objectiefKopText.append("Actief");
-                //objectiefText.setText(objectiefTotalText + partialText);
                 break;
             case EVALUATIE:
                 SOEPText = evaluatieText;
                 evaluatieKopText.append("Actief");
-                //evaluatieText.setText(evaluatieTotalText + partialText);
                 break;
             case PLAN:
                 SOEPText = planText;
                 planKopText.append("Actief");
-                //planText.setText(planTotalText + partialText);
                 break;
             default:
                 break;
