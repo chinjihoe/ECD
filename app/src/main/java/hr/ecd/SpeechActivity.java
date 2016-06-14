@@ -140,7 +140,7 @@ public class SpeechActivity extends Activity implements RecognitionListener {
         annulerenButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                annulerenAlertDialog();
             }
         });
         SOEPStatus = SOEP.SUBJECTIEF;
