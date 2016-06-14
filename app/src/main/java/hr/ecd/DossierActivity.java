@@ -63,7 +63,6 @@ public class DossierActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-
         mDrawerList = (ListView)findViewById(R.id.navList);
 
         addDrawerItems();
@@ -92,8 +91,6 @@ public class DossierActivity extends AppCompatActivity {
 
         updateRecentJournal();
         getClientData();
-        getEpisodesData();
-
     }
 
     private void getClientData() {
@@ -107,14 +104,6 @@ public class DossierActivity extends AppCompatActivity {
                     progressDialog.dismiss();
                 }
             });
-        }
-        catch(JSONException e) {
-            e.printStackTrace();
-        }
-    }
-    private void getEpisodesData(){
-        Api api = new Api();
-        try{
             api.request(this, "/episodes/" + this.userId, null, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
@@ -122,8 +111,8 @@ public class DossierActivity extends AppCompatActivity {
                 }
             });
         }
-        catch (JSONException e){
-
+        catch(JSONException e) {
+            e.printStackTrace();
         }
     }
 
@@ -160,11 +149,19 @@ public class DossierActivity extends AppCompatActivity {
     }
     private void fillEpisodesData(JSONObject response){
         try{
-            JSONArray activities = response.getJSONArray("episodes");
-            Log.i("AAAAAAAAAAAAAAAAAAAAAA",activities.toString());
+            TextView episodesText = (TextView) findViewById(R.id.actueleEpisodeText);
+            JSONArray episodes = response.getJSONArray("episodes");
+            int episodesAmount = episodes.length();
+            for(int i=0;i<episodesAmount;i++){
+                if(i!=episodesAmount-1)
+                    episodesText.append(episodes.getJSONObject(i).getString("name")+"\n");
+                else
+                    episodesText.append(episodes.getJSONObject(i).getString("name"));
+            }
+
         }
         catch (JSONException e){
-
+            e.printStackTrace();
         }
 
     }
@@ -258,7 +255,7 @@ public class DossierActivity extends AppCompatActivity {
                 String fullTime = (date.split("T")[1]);
                 String time = fullTime.split("\\.")[0];
 
-                journal.append("S:" + " " + subjective + "\n" +
+                journal.append("S: " + " " + subjective + "\n" +
                         "O: " + " " + objective + "\n" +
                         "E: " + " " + evaluation + "\n" +
                         "P: " + " " + plan + "\n" +
@@ -291,7 +288,6 @@ public class DossierActivity extends AppCompatActivity {
         catch(JSONException e) {
             e.printStackTrace();
         }
-
     }
 
     private void updateRecentJournal() {
