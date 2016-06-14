@@ -92,6 +92,7 @@ public class DossierActivity extends AppCompatActivity {
 
         updateRecentJournal();
         getClientData();
+        getEpisodesData();
 
     }
 
@@ -101,9 +102,9 @@ public class DossierActivity extends AppCompatActivity {
             api.request(this, "/client/" + this.userId, null, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
+                    fillClientData(response);
                     progressDialog.hide();
                     progressDialog.dismiss();
-                    fillClientData(response);
                 }
             });
         }
@@ -111,14 +112,27 @@ public class DossierActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+    private void getEpisodesData(){
+        Api api = new Api();
+        try{
+            api.request(this, "/episodes/" + this.userId, null, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    fillEpisodesData(response);
+                }
+            });
+        }
+        catch (JSONException e){
+
+        }
+    }
 
     private void fillClientData(JSONObject response) {
-
         TextView voornaamText = (TextView)findViewById(R.id.voornaamText),
                 achternaamText = (TextView)findViewById(R.id.achternaamText),
                 geboorteDatumText = (TextView)findViewById(R.id.geboortedatumText),
                 kamerText = (TextView)findViewById(R.id.kamernrText),
-                attentieText = (TextView)findViewById(R.id.extraInformatieText),
+                extraInformatieText = (TextView)findViewById(R.id.extraInformatieText),
                 telefoonNummerText = (TextView)findViewById(R.id.telnrText),
                 emailText = (TextView)findViewById(R.id.emailText),
                 burgerlijkestaatText = (TextView)findViewById(R.id.burgelijkestaatText),
@@ -127,7 +141,6 @@ public class DossierActivity extends AppCompatActivity {
                 leeftijdText = (TextView)findViewById(R.id.leeftijdText);
 
         try {
-
             voornaamText.append(response.getString("name"));
             achternaamText.append(response.getString("surname"));
             geboorteDatumText.append(response.getString("birthdate"));
@@ -139,16 +152,22 @@ public class DossierActivity extends AppCompatActivity {
             geslachtText.append((response.getString("sex").equals("1")) ? "Man" : "Vrouw");
             String[] age = response.getString("birthdate").split("-");
             leeftijdText.append("" + getAge(Integer.parseInt(age[0]),Integer.parseInt(age[1]), 1));
-
-            if(!response.isNull("detail"))
-                attentieText.setText(response.getString("detail"));
-
+            extraInformatieText.setText(response.getString("extra"));
         }
         catch(JSONException e) {
             e.printStackTrace();
         }
     }
+    private void fillEpisodesData(JSONObject response){
+        try{
+            JSONArray activities = response.getJSONArray("episodes");
+            Log.i("AAAAAAAAAAAAAAAAAAAAAA",activities.toString());
+        }
+        catch (JSONException e){
 
+        }
+
+    }
     public int getAge (int _year, int _month, int _day) {
         GregorianCalendar cal = new GregorianCalendar();
         int y, m, d, a;
