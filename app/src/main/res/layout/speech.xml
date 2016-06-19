@@ -69,7 +69,10 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="-"
                 android:id="@+id/subjectiefText"
-                android:layout_below="@+id/subjectiefKopText" />
+                android:layout_below="@+id/subjectiefKopText"
+                android:clickable="true"
+                android:onClick="onClick"
+                android:longClickable="true"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

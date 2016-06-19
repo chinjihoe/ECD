@@ -1,7 +1,8 @@
 package hr.ecd;
 
 import java.util.ArrayList;
-
+import java.util.Collections;
+import java.util.List;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,24 +12,29 @@ import android.speech.SpeechRecognizer;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.res.TypedArrayUtils;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.ActionMode;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 import android.media.AudioManager;
-
 import com.android.volley.Response;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class SpeechActivity extends Activity implements RecognitionListener {
+    private static final int TRANSLATE = 1;
     private Toolbar toolbar;
     private TextView returnedText;
     private TextView subjectiefText;
@@ -69,6 +75,9 @@ public class SpeechActivity extends Activity implements RecognitionListener {
         PLAN;
     }
 
+    boolean correctie = false;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,6 +105,8 @@ public class SpeechActivity extends Activity implements RecognitionListener {
         progressBar.setVisibility(View.VISIBLE);
         progressBar.setIndeterminate(true);
         listen();
+        onClick();
+
         toggleButton.setOnCheckedChangeListener(new OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -119,7 +130,7 @@ public class SpeechActivity extends Activity implements RecognitionListener {
                 if(previous == -1)
                     previous = 3;
                 SOEPStatus = SOEP.values()[previous];
-                changeSOEPStatus();
+                changeSOEPStatus("Actief");
             }
         });
         volgendeButton.setOnClickListener(new View.OnClickListener(){
@@ -129,7 +140,7 @@ public class SpeechActivity extends Activity implements RecognitionListener {
                 if(next == 4)
                     next = 0;
                 SOEPStatus = SOEP.values()[next];
-                changeSOEPStatus();
+                changeSOEPStatus("Actief");
             }
         });
         afrondenButton.setOnClickListener(new View.OnClickListener(){
@@ -145,6 +156,7 @@ public class SpeechActivity extends Activity implements RecognitionListener {
             }
         });
         SOEPStatus = SOEP.SUBJECTIEF;
+
     }
 
 
@@ -320,67 +332,106 @@ public class SpeechActivity extends Activity implements RecognitionListener {
         Log.i(LOG_TAG,"onPartialResults: "+partialText);
 
         String commands = partialText.toLowerCase();
-        Log.i("LENTH",""+commands.length());
-        boolean doChangeSOEPStatus = true;
+        int commandsLength = commands.length();
+        Log.i("LENGTH",""+commandsLength);
+        boolean doChangeSOEPStatus = true,
+                commandFound = false,
+                stopped = false;
 
         partialText = partialText.replaceAll(" commando", "");
         partialText = partialText.replaceAll("Commando", "");
         partialText = partialText.replaceAll("commando", "");
 
         if(commands.length()>1 && commands.contains("commando") && commands.split(" ").length > 1){
+            commandFound = true;
             Integer index = java.util.Arrays.asList(commands.split(" ")).indexOf("commando");
-            boolean stopped = false;
             if((commands.split(" ").length-1) > index) {
                 String command = commands.split(" ")[index+1];
+                if(!correctie){
+                    if (command.equals("subjectief")) {
+                        SOEPStatus = SOEP.SUBJECTIEF;
+
+                    } else if (command.equals("objectief") || command.equals("objektiv") || command.equals("objektief")) {
+                        SOEPStatus = SOEP.OBJECTIEF;
+
+                    } else if (command.equals("evaluatie")) {
+                        SOEPStatus = SOEP.EVALUATIE;
+
+                    } else if (command.equals("plan")) {
+                        SOEPStatus = SOEP.PLAN;
+                    }
+                    else {
+                        doChangeSOEPStatus = false;
+                    }
+                    if (doChangeSOEPStatus) {
+                        changeSOEPStatus("Actief");
+                        Log.i("SOEPStatus", SOEPStatus.toString());
+                    }
+                }
+
                 if (command.equals("stop")) {
-                    speech.stopListening();
-                    speech.destroy();
                     toggleButton.setChecked(false);
                     stopped = true;
-                } else if (command.equals("subjectief")) {
-                    SOEPStatus = SOEP.SUBJECTIEF;
+                    correctie = false;
+                } else if(command.equals("correctie")||command.equals("correcties")){
+                    Log.i("COMMANDO","CORRECTIE");
+                    correctie = !correctie;
+                    if(correctie)
+                        changeSOEPStatus("Correctie");
+                    else
+                        changeSOEPStatus("Actief");
 
-                } else if (command.equals("objectief") || command.equals("objektiv") || command.equals("objektief")) {
-                    SOEPStatus = SOEP.OBJECTIEF;
-
-                } else if (command.equals("evaluatie")) {
-                    SOEPStatus = SOEP.EVALUATIE;
-
-                } else if (command.equals("plan")) {
-                    SOEPStatus = SOEP.PLAN;
-
-                } else
-                    doChangeSOEPStatus = false;
-
-                if (doChangeSOEPStatus) {
-                    changeSOEPStatus();
-                    Log.i("SOEPStatus", SOEPStatus.toString());
                 }
+
+                partialText = partialText.replaceAll(command, "");
+                speech.stopListening();
+                speech.destroy();
+
                 if(!stopped){
-                    partialText = partialText.replaceAll(command, "");
-                    speech.stopListening();
-                    speech.destroy();
                     listen();
                 }
+
             }
         }
-
-        switch (SOEPStatus){
-            case SUBJECTIEF:
-                SOEPText.setText(replaceSymbols(subjectiefTotalText+partialText));
-                break;
-            case OBJECTIEF:
-                SOEPText.setText(replaceSymbols(objectiefTotalText+partialText));
-                break;
-            case EVALUATIE:
-                SOEPText.setText(replaceSymbols(evaluatieTotalText+partialText));
-                break;
-            case PLAN:
-                SOEPText.setText(replaceSymbols(planTotalText+partialText));
-                break;
-            default:
-                break;
+        if(!commandFound&&!correctie){
+            switch (SOEPStatus){
+                case SUBJECTIEF:
+                    SOEPText.setText(replaceSymbols(subjectiefTotalText+partialText));
+                    break;
+                case OBJECTIEF:
+                    SOEPText.setText(replaceSymbols(objectiefTotalText+partialText));
+                    break;
+                case EVALUATIE:
+                    SOEPText.setText(replaceSymbols(evaluatieTotalText+partialText));
+                    break;
+                case PLAN:
+                    SOEPText.setText(replaceSymbols(planTotalText+partialText));
+                    break;
+                default:
+                    break;
+            }
         }
+        else if(correctie&&commandsLength>1){
+            String[] commandsSplit = commands.split(" ");
+            String textToRemove = commandsSplit[commandsSplit.length-1];
+            String[] textSplit = SOEPText.getText().toString().toLowerCase().split(" ");
+
+            for(int i=textSplit.length-1;i>-1;i--){
+                if(textSplit[i].equals(textToRemove)){
+                    textSplit[i] = "";
+                    break;
+                }
+            }
+            String newText = TextUtils.join(" ",textSplit);
+            SOEPText.setText(newText);
+            getText();
+        }
+        SOEPText.setText(SOEPText.getText().toString().replaceAll("\\s+", " "));
+        //TODO
+        //filter symbols when in correction mode
+        //filter spaces between symbols and words
+        //implement keyboard to modify text
+
     }
 
     public String replaceSymbols(String totalText){
@@ -388,7 +439,7 @@ public class SpeechActivity extends Activity implements RecognitionListener {
         return totalText;
     }
 
-    public void changeSOEPStatus(){
+    public void changeSOEPStatus(String status){
         subjectiefKopText.setText("Subjectief: ");
         objectiefKopText.setText("Objectief: ");
         evaluatieKopText.setText("Evaluatie: ");
@@ -396,19 +447,19 @@ public class SpeechActivity extends Activity implements RecognitionListener {
         switch (SOEPStatus){
             case SUBJECTIEF:
                 SOEPText = subjectiefText;
-                subjectiefKopText.append("Actief");
+                subjectiefKopText.append(status);
                 break;
             case OBJECTIEF:
                 SOEPText = objectiefText;
-                objectiefKopText.append("Actief");
+                objectiefKopText.append(status);
                 break;
             case EVALUATIE:
                 SOEPText = evaluatieText;
-                evaluatieKopText.append("Actief");
+                evaluatieKopText.append(status);
                 break;
             case PLAN:
                 SOEPText = planText;
-                planKopText.append("Actief");
+                planKopText.append(status);
                 break;
             default:
                 break;
@@ -418,30 +469,34 @@ public class SpeechActivity extends Activity implements RecognitionListener {
     @Override
     public void onReadyForSpeech(Bundle arg0) {
         Log.i(LOG_TAG, "onReadyForSpeech");
+        SOEPText.setText(SOEPText.getText()+" ");
+        getText();
     }
 
     @Override
     public void onResults(Bundle results) {
         Log.i(LOG_TAG, "onResults: "+results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION).get(0));
-        totalText = returnedText.getText()+" ";
+        speech.destroy();
+        listen();
+    }
+
+    public void getText(){
         switch (SOEPStatus){
             case SUBJECTIEF:
-                subjectiefTotalText = SOEPText.getText()+" ";
+                subjectiefTotalText = SOEPText.getText().toString();
                 break;
             case OBJECTIEF:
-                objectiefTotalText = SOEPText.getText()+" ";
+                objectiefTotalText = SOEPText.getText().toString();
                 break;
             case EVALUATIE:
-                evaluatieTotalText = SOEPText.getText()+" ";
+                evaluatieTotalText = SOEPText.getText().toString();
                 break;
             case PLAN:
-                planTotalText = SOEPText.getText()+" ";
+                planTotalText = SOEPText.getText().toString();
                 break;
             default:
                 break;
         }
-        speech.destroy();
-        listen();
     }
 
     @Override
@@ -485,6 +540,90 @@ public class SpeechActivity extends Activity implements RecognitionListener {
         }
         return message;
     }
+
+    public void onClick(){
+        subjectiefText.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Log.i("CLICK","SUBJECTIEF IS CLICKED!");
+            }
+        });
+        subjectiefText.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Log.i("LONGCLICK","SUBJECTIEF IS LONGCLICKED!");
+                return true;
+            }
+        });
+    }
+
+    /*protected void correctie(){
+        subjectiefText.setFocusable(true);
+        subjectiefText.setTextIsSelectable(true);
+        subjectiefText.setLongClickable(true);
+
+        subjectiefText.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
+
+            @Override
+            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                // Remove the "select all" option
+                menu.removeItem(android.R.id.selectAll);
+                menu.removeItem(android.R.id.shareText);
+                // Remove the "cut" option
+                menu.removeItem(android.R.id.cut);
+                // Remove the "copy all" option
+                menu.removeItem(android.R.id.copy);
+
+                return true;
+            }
+
+            @Override
+            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                // Called when action mode is first created. The menu supplied
+                // will be used to generate action buttons for the action mode
+
+                // Here is an example MenuItem
+                menu.add(0, TRANSLATE, 0, "Definition");//.setIcon(R.drawable.hp_icon);
+
+                return true;
+            }
+
+            @Override
+            public void onDestroyActionMode(ActionMode mode) {
+                // Called when an action mode is about to be exited and
+                // destroyed
+            }
+
+            @Override
+            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                switch (item.getItemId()) {
+                    case TRANSLATE:
+                        int min = 0;
+                        int max = subjectiefText.getText().length();
+                        if (subjectiefText.isFocused()) {
+                            final int selStart = subjectiefText.getSelectionStart();
+                            final int selEnd = subjectiefText.getSelectionEnd();
+
+                            min = Math.max(0, Math.min(selStart, selEnd));
+                            max = Math.max(0, Math.max(selStart, selEnd));
+                        }
+                        // Perform your definition lookup with the selected text
+                        final CharSequence selectedText = subjectiefText.getText().subSequence(min, max);
+                        // Finish and close the ActionMode
+                        mode.finish();
+                        return true;
+                    default:
+                        break;
+                }
+                return false;
+            }
+
+        });
+
+
+
+    }*/
 
 
 }
