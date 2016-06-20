@@ -120,6 +120,7 @@ public class SpeechActivity extends Activity implements RecognitionListener {
                     progressBar.setVisibility(View.INVISIBLE);
                     speech.stopListening();
                     speech.destroy();
+                    correctionIsActive = false;
 
                 }
             }
