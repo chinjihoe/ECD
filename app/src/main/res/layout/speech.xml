@@ -72,8 +72,8 @@
                 android:id="@+id/subjectiefText"
                 android:layout_below="@+id/subjectiefKopText"
                 android:clickable="true"
-                android:onClick="onClick"
-                android:longClickable="true"/>
+                android:longClickable="true"
+                android:focusable="true"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

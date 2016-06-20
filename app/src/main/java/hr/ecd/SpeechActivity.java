@@ -84,7 +84,9 @@ public class SpeechActivity extends Activity implements RecognitionListener {
         PLAN
     }
 
-    boolean correctie = false;
+    private boolean correctionIsActive = false;
+    private boolean commandIsActive = false;
+    private String prevResult = "";
 
 
     @Override
@@ -347,114 +349,115 @@ public class SpeechActivity extends Activity implements RecognitionListener {
         String commands = partialText.toLowerCase();
         int commandsLength = commands.length();
         Log.i("LENGTH",""+commandsLength);
-        boolean doChangeSOEPStatus = true,
-                commandFound = false,
-                stopped = false;
+        boolean doChangeSOEPStatus = true;
+
+        String[] commandsSplit = commands.split(" ");
+        int wordCount = commandsSplit.length;
 
         partialText = partialText.replaceAll(" commando", "");
         partialText = partialText.replaceAll("Commando", "");
         partialText = partialText.replaceAll("commando", "");
 
-        if(commands.length()>1 && commands.contains("commando") && commands.split(" ").length > 1){
-            commandFound = true;
-            Integer index = java.util.Arrays.asList(commands.split(" ")).indexOf("commando");
-            if((commands.split(" ").length-1) > index) {
-                String command = commands.split(" ")[index+1];
-                if(!correctie){
-                    switch(command) {
-                        case "subjectief":
-                            SOEPStatus = SOEP.SUBJECTIEF;
-                            break;
-                        case "objectief":
-                        case "objektiv":
-                        case "objektief":
-                            SOEPStatus = SOEP.OBJECTIEF;
-                            break;
-                        case "evaluatie":
-                            SOEPStatus = SOEP.EVALUATIE;
-                            break;
-                        case "plan":
-                            SOEPStatus = SOEP.PLAN;
-                            break;
-                        default:
-                            doChangeSOEPStatus = false;
-                            break;
-                    }
+        if(commands.length()>1&&commandsLength!=prevResult.length()) {
+            if (commandsSplit[wordCount-1].equals("commando")|| commandsSplit[wordCount-1].equals("mando") || commandsSplit[wordCount-1].equals("mondo") || commandsSplit[wordCount-1].equals("cuando")){
+                commandIsActive = true;
+                if(!correctionIsActive)
+                    changeSOEPStatus("Commando");
+            }
+            Log.i("CommandoIsActive: ",commandIsActive+"");
 
+            if (commandIsActive) {
+                commandIsActive = false;
+                int index = commandsSplit.length;
+                String command = commandsSplit[index - 1];
+                if (!correctionIsActive) {
+                    if (command.equals("subjectief")) {
+                        SOEPStatus = SOEP.SUBJECTIEF;
+                    } else if (command.equals("objectief") || command.equals("objektiv") || command.equals("objektief") || command.equals("adjectief")) {
+                        SOEPStatus = SOEP.OBJECTIEF;
+                    } else if (command.equals("evaluatie")) {
+                        SOEPStatus = SOEP.EVALUATIE;
+                    } else if (command.equals("plan") || command.equals("laan")) {
+                        SOEPStatus = SOEP.PLAN;
+                    } else {
+                        doChangeSOEPStatus = false;
+                    }
                     if (doChangeSOEPStatus) {
                         changeSOEPStatus("Actief");
                         Log.i("SOEPStatus", SOEPStatus.toString());
+                        reset();
+                    }
+                }
+                else
+                    doChangeSOEPStatus = false;
+
+                if(!doChangeSOEPStatus){
+                    if (command.equals("stop")) {
+                        toggleButton.setChecked(false);
+                        changeSOEPStatus("Actief");
+                    } else if (command.equals("correctie") || command.equals("correcties")) {
+                        Log.i("COMMANDO", "CORRECTIE");
+                        correctionIsActive = !correctionIsActive;
+
+                        if (correctionIsActive)
+                            changeSOEPStatus("Correctie");
+                        else
+                            changeSOEPStatus("Actief");
+
+                }
+
+                    Log.i("CommandoIsActive: ",commandIsActive+"");
+
+                }
+            } else if (!commandIsActive && !correctionIsActive) {
+                switch (SOEPStatus) {
+                    case SUBJECTIEF:
+                        SOEPText.setText(subjectiefTotalText + partialText);
+                        break;
+                    case OBJECTIEF:
+                        SOEPText.setText(objectiefTotalText + partialText);
+                        break;
+                    case EVALUATIE:
+                        SOEPText.setText(evaluatieTotalText + partialText);
+                        break;
+                    case PLAN:
+                        SOEPText.setText(planTotalText + partialText);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            if (correctionIsActive) {
+                Log.i("CORRECTIE","DELETE");
+                String textToRemove = commandsSplit[wordCount - 1];
+                String[] textSplit = SOEPText.getText().toString().toLowerCase().split(" ");
+
+                for (int i = textSplit.length - 1; i > -1; i--) {
+                    if (textSplit[i].equals(textToRemove)) {
+                        textSplit[i] = "";
+                        break;
                     }
                 }
 
-                if (command.equals("stop")) {
-                    toggleButton.setChecked(false);
-                    stopped = true;
-                    correctie = false;
-                } else if(command.equals("correctie")||command.equals("correcties")){
-                    Log.i("COMMANDO","CORRECTIE");
-                    correctie = !correctie;
-                    if(correctie)
-                        changeSOEPStatus("Correctie");
-                    else
-                        changeSOEPStatus("Actief");
-
-                }
-
-                partialText = partialText.replaceAll(command, "");
-                speech.stopListening();
-                speech.destroy();
-
-                if(!stopped){
-                    listen();
-                }
-
+                String newText = TextUtils.join(" ", textSplit);
+                SOEPText.setText(newText);
+                getText();
+                reset();
             }
+            SOEPText.setText(replaceSymbols(SOEPText.getText().toString().replaceAll("\\s+", " ")));
         }
-        if(!commandFound&&!correctie){
-            switch (SOEPStatus){
-                case SUBJECTIEF:
-                    SOEPText.setText(replaceSymbols(subjectiefTotalText+partialText));
-                    break;
-                case OBJECTIEF:
-                    SOEPText.setText(replaceSymbols(objectiefTotalText+partialText));
-                    break;
-                case EVALUATIE:
-                    SOEPText.setText(replaceSymbols(evaluatieTotalText+partialText));
-                    break;
-                case PLAN:
-                    SOEPText.setText(replaceSymbols(planTotalText+partialText));
-                    break;
-                default:
-                    break;
-            }
-        }
-        else if(correctie&&commandsLength>1){
-            String[] commandsSplit = commands.split(" ");
-            String textToRemove = commandsSplit[commandsSplit.length-1];
-            String[] textSplit = SOEPText.getText().toString().toLowerCase().split(" ");
-
-            for(int i=textSplit.length-1;i>-1;i--){
-                if(textSplit[i].equals(textToRemove)){
-                    textSplit[i] = "";
-                    break;
-                }
-            }
-            String newText = TextUtils.join(" ",textSplit);
-            SOEPText.setText(newText);
-            getText();
-        }
-        SOEPText.setText(SOEPText.getText().toString().replaceAll("\\s+", " "));
-        //TODO
-        //filter symbols when in correction mode
-        //filter spaces between symbols and words
-        //implement keyboard to modify text
-
+        prevResult = commands;
     }
 
     public String replaceSymbols(String totalText){
         totalText = totalText.replaceAll(" punt",".").replaceAll(" vraagteken","?").replaceAll(" uitroepteken","!").replaceAll(" komma",",");
         return totalText;
+    }
+
+    public void reset(){
+        speech.cancel();
+        speech.destroy();
+        listen();
     }
 
     public void changeSOEPStatus(String status){
@@ -489,6 +492,7 @@ public class SpeechActivity extends Activity implements RecognitionListener {
         Log.i(LOG_TAG, "onReadyForSpeech");
         SOEPText.setText(SOEPText.getText()+" ");
         getText();
+        prevResult = "";
     }
 
     @Override
@@ -496,6 +500,7 @@ public class SpeechActivity extends Activity implements RecognitionListener {
         Log.i(LOG_TAG, "onResults: "+results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION).get(0));
         speech.destroy();
         listen();
+        onPartialResults(results);
     }
 
     public void getText(){
@@ -566,7 +571,7 @@ public class SpeechActivity extends Activity implements RecognitionListener {
         textViews[1] = (TextView)findViewById(R.id.objectiefText);
         textViews[2] = (TextView)findViewById(R.id.evaluatieText);
         textViews[3] = (TextView)findViewById(R.id.planText);
-        
+
         for (TextView textView: textViews) {
             textView.setFocusable(true);
             textView.setTextIsSelectable(true);
