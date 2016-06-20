@@ -157,6 +157,8 @@ public class SpeechActivity extends Activity implements RecognitionListener {
         });
         SOEPStatus = SOEP.SUBJECTIEF;
 
+        correction();
+
     }
 
 
@@ -549,16 +551,10 @@ public class SpeechActivity extends Activity implements RecognitionListener {
                 Log.i("CLICK","SUBJECTIEF IS CLICKED!");
             }
         });
-        subjectiefText.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                Log.i("LONGCLICK","SUBJECTIEF IS LONGCLICKED!");
-                return true;
-            }
-        });
     }
 
-    /*protected void correctie(){
+    protected void correction(){
+
         subjectiefText.setFocusable(true);
         subjectiefText.setTextIsSelectable(true);
         subjectiefText.setLongClickable(true);
@@ -584,7 +580,7 @@ public class SpeechActivity extends Activity implements RecognitionListener {
                 // will be used to generate action buttons for the action mode
 
                 // Here is an example MenuItem
-                menu.add(0, TRANSLATE, 0, "Definition");//.setIcon(R.drawable.hp_icon);
+                menu.add(0, TRANSLATE, 0, "Definition").setIcon(R.drawable.hp_icon);
 
                 return true;
             }
@@ -623,7 +619,7 @@ public class SpeechActivity extends Activity implements RecognitionListener {
 
 
 
-    }*/
+    }
 
 
 }
