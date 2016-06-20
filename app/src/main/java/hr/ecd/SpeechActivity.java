@@ -340,8 +340,7 @@ public class SpeechActivity extends Activity implements RecognitionListener {
         String commands = partialText.toLowerCase();
         int commandsLength = commands.length();
         Log.i("LENGTH",""+commandsLength);
-        boolean doChangeSOEPStatus = true,
-                stopped = false;
+        boolean doChangeSOEPStatus = true;
 
         partialText = partialText.replaceAll(" commando", "");
         partialText = partialText.replaceAll("Commando", "");
@@ -384,7 +383,6 @@ public class SpeechActivity extends Activity implements RecognitionListener {
                 if(!doChangeSOEPStatus){
                     if (command.equals("stop")) {
                         toggleButton.setChecked(false);
-                        stopped = true;
                         changeSOEPStatus("Actief");
                     } else if (command.equals("correctie") || command.equals("correcties") || command.equals("collectie")) {
                         Log.i("COMMANDO", "CORRECTIE");
