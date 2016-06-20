@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
@@ -15,13 +16,17 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.ActionMode;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 import android.media.AudioManager;
@@ -63,6 +68,8 @@ public class SpeechActivity extends Activity implements RecognitionListener {
     private String planTotalText = "";
     private String[] allText = new String[4];
 
+    private Context context;
+
     private SOEP SOEPStatus;
     public enum SOEP{
         SUBJECTIEF,
@@ -102,7 +109,9 @@ public class SpeechActivity extends Activity implements RecognitionListener {
         progressBar.setVisibility(View.VISIBLE);
         progressBar.setIndeterminate(true);
         listen();
-        //correction();
+
+        context = this;
+
         toggleButton.setOnCheckedChangeListener(new OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -153,6 +162,7 @@ public class SpeechActivity extends Activity implements RecognitionListener {
         });
         SOEPStatus = SOEP.SUBJECTIEF;
 
+        correction();
     }
 
 
@@ -543,6 +553,7 @@ public class SpeechActivity extends Activity implements RecognitionListener {
     }
 
     protected void correction(){
+
         subjectiefText.setFocusable(true);
         subjectiefText.setTextIsSelectable(true);
         subjectiefText.setLongClickable(true);
@@ -570,7 +581,7 @@ public class SpeechActivity extends Activity implements RecognitionListener {
                 // will be used to generate action buttons for the action mode
 
                 // Here is an example MenuItem
-                menu.add(0, TRANSLATE, 0, "Definition");//.setIcon(R.drawable.hp_icon);
+                menu.add(0, TRANSLATE, 0, "Definition").setIcon(R.drawable.ic_border_color_black_24dp);
 
                 return true;
             }
@@ -587,15 +598,45 @@ public class SpeechActivity extends Activity implements RecognitionListener {
                     case TRANSLATE:
                         int min = 0;
                         int max = subjectiefText.getText().length();
+
+                        Button b = (Button)findViewById(R.id.editTextButton);
+                        EditText et = (EditText)findViewById(R.id.editSelectedText);
+                        RelativeLayout rl = (RelativeLayout) findViewById(R.id.overlay);
+                        ToggleButton tb = (ToggleButton)findViewById(R.id.speechToggleButton);
+
                         if (subjectiefText.isFocused()) {
                             final int selStart = subjectiefText.getSelectionStart();
                             final int selEnd = subjectiefText.getSelectionEnd();
 
                             min = Math.max(0, Math.min(selStart, selEnd));
                             max = Math.max(0, Math.max(selStart, selEnd));
+
+                            b.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    EditText editedText = (EditText)findViewById(R.id.editSelectedText);
+                                    RelativeLayout rl = (RelativeLayout) findViewById(R.id.overlay);
+                                    ToggleButton tb = (ToggleButton)findViewById(R.id.speechToggleButton);
+
+                                    rl.setVisibility(View.INVISIBLE);
+                                    tb.setVisibility(View.VISIBLE);
+
+                                    editSelectedText(selStart, selEnd, editedText.getText().toString(), subjectiefText);
+                                }
+                            });
+
                         }
                         // Perform your definition lookup with the selected text
+
+
+
+                        rl.setVisibility(View.VISIBLE);
+                        tb.setVisibility(View.INVISIBLE);
+
+
+
                         final CharSequence selectedText = subjectiefText.getText().subSequence(min, max);
+                        et.setText(selectedText);
                         // Finish and close the ActionMode
                         mode.finish();
                         return true;
@@ -609,6 +650,14 @@ public class SpeechActivity extends Activity implements RecognitionListener {
 
 
 
+    }
+
+    public void editSelectedText(int start, int end, String newText, TextView subject) {
+        Log.e("Test s:", start + " e:" + end + " st:" + newText);
+        String begin = subject.getText().toString().substring(0, start);
+        String ending = subject.getText().toString().substring(end, subject.getText().length());
+        String newString = begin + newText + ending;
+        subject.setText(newString);
     }
 
 

@@ -3,6 +3,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/container"
     android:orientation="vertical" >
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -138,6 +139,31 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:weightSum="1"
+        android:id="@+id/tableRow2"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Afronden"
+            android:id="@+id/afrondenButton"
+            android:layout_weight="0.5" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Annuleren"
+            android:id="@+id/annulerenButton"
+            android:layout_weight="0.5" />
+
+    </TableRow>
+
+    <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="1"
         android:id="@+id/tableRow"
         android:layout_above="@+id/tableRow2"
         android:layout_alignParentLeft="true"
@@ -158,27 +184,37 @@
             android:layout_weight="0.5" />
     </TableRow>
 
-    <TableRow
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:weightSum="1"
-        android:id="@+id/tableRow2"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+    <RelativeLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/overlay"
+        android:background="#E6000000"
+        android:visibility="invisible"
+        android:layout_centerVertical="true">
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Afronden"
-            android:id="@+id/afrondenButton"
-            android:layout_weight="0.5" />
+            android:text="Text wijziging opslaan"
+            android:id="@+id/editTextButton"
+            android:layout_gravity="center_vertical"
 
-        <Button
-            android:layout_width="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <EditText
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Annuleren"
-            android:id="@+id/annulerenButton"
-            android:layout_weight="0.5" />
-    </TableRow>
+            android:id="@+id/editSelectedText"
+            android:textColor="@color/White"
+            android:textAlignment="center"
+            android:gravity="center"
+            android:layout_above="@+id/editTextButton"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+    </RelativeLayout>
+
 </RelativeLayout>
