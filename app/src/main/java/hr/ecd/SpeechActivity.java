@@ -428,7 +428,7 @@ public class SpeechActivity extends Activity implements RecognitionListener {
                             getText();
                             reset();
                             correctionIsActive = false;
-                        } else if (command.equals("backspace")) {
+                        } else if (command.equals("backspace")||command.equals("rackspace")) {
                             String[] soepText = SOEPText.getText().toString().split(" ");
                             if (soepText.length > 0) {
                                 soepText[soepText.length - 1] = "";
