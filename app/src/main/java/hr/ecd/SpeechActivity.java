@@ -36,6 +36,9 @@ import android.media.AudioManager;
 import com.android.volley.Response;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
+
+import hr.ecd.dummy.ActionMode_Callback;
 
 public class SpeechActivity extends Activity implements RecognitionListener {
     private static final int TRANSLATE = 1;
@@ -78,7 +81,7 @@ public class SpeechActivity extends Activity implements RecognitionListener {
         SUBJECTIEF,
         OBJECTIEF,
         EVALUATIE,
-        PLAN;
+        PLAN
     }
 
     boolean correctie = false;
@@ -111,7 +114,6 @@ public class SpeechActivity extends Activity implements RecognitionListener {
         progressBar.setVisibility(View.VISIBLE);
         progressBar.setIndeterminate(true);
         listen();
-        onClick();
 
         context = this;
 
@@ -308,7 +310,7 @@ public class SpeechActivity extends Activity implements RecognitionListener {
 
     @Override
     public void onBufferReceived(byte[] buffer) {
-        Log.i(LOG_TAG, "onBufferReceived: " + buffer);
+        Log.i(LOG_TAG, "onBufferReceived: " + buffer.toString());
     }
 
     @Override
@@ -338,7 +340,8 @@ public class SpeechActivity extends Activity implements RecognitionListener {
     @Override
     public void onPartialResults(Bundle partialResults) {
         ArrayList<String> matches = partialResults.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
-        partialText = matches.get(0);
+        if(matches.get(0) != null)
+            partialText = matches.get(0);
         Log.i(LOG_TAG,"onPartialResults: "+partialText);
 
         String commands = partialText.toLowerCase();
@@ -358,21 +361,26 @@ public class SpeechActivity extends Activity implements RecognitionListener {
             if((commands.split(" ").length-1) > index) {
                 String command = commands.split(" ")[index+1];
                 if(!correctie){
-                    if (command.equals("subjectief")) {
-                        SOEPStatus = SOEP.SUBJECTIEF;
-
-                    } else if (command.equals("objectief") || command.equals("objektiv") || command.equals("objektief")) {
-                        SOEPStatus = SOEP.OBJECTIEF;
-
-                    } else if (command.equals("evaluatie")) {
-                        SOEPStatus = SOEP.EVALUATIE;
-
-                    } else if (command.equals("plan")) {
-                        SOEPStatus = SOEP.PLAN;
+                    switch(command) {
+                        case "subjectief":
+                            SOEPStatus = SOEP.SUBJECTIEF;
+                            break;
+                        case "objectief":
+                        case "objektiv":
+                        case "objektief":
+                            SOEPStatus = SOEP.OBJECTIEF;
+                            break;
+                        case "evaluatie":
+                            SOEPStatus = SOEP.EVALUATIE;
+                            break;
+                        case "plan":
+                            SOEPStatus = SOEP.PLAN;
+                            break;
+                        default:
+                            doChangeSOEPStatus = false;
+                            break;
                     }
-                    else {
-                        doChangeSOEPStatus = false;
-                    }
+
                     if (doChangeSOEPStatus) {
                         changeSOEPStatus("Actief");
                         Log.i("SOEPStatus", SOEPStatus.toString());
@@ -551,109 +559,28 @@ public class SpeechActivity extends Activity implements RecognitionListener {
         return message;
     }
 
-    public void onClick(){
-        subjectiefText.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                Log.i("CLICK","SUBJECTIEF IS CLICKED!");
-            }
-        });
-    }
-
     protected void correction(){
 
-        subjectiefText.setFocusable(true);
-        subjectiefText.setTextIsSelectable(true);
-        subjectiefText.setLongClickable(true);
+        TextView textViews[] = new TextView[4];
+        textViews[0] = (TextView)findViewById(R.id.subjectiefText);
+        textViews[1] = (TextView)findViewById(R.id.objectiefText);
+        textViews[2] = (TextView)findViewById(R.id.evaluatieText);
+        textViews[3] = (TextView)findViewById(R.id.planText);
+        
+        for (TextView textView: textViews) {
+            textView.setFocusable(true);
+            textView.setTextIsSelectable(true);
+            textView.setLongClickable(true);
 
-        subjectiefText.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
+            final TextView finalView = textView;
 
-            @Override
-            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-                // Remove the "select all" option
-                menu.removeItem(android.R.id.selectAll);
-                menu.removeItem(android.R.id.shareText);
-                // Remove the "cut" option
-                menu.removeItem(android.R.id.cut);
-                // Remove the "copy all" option
-                menu.removeItem(android.R.id.copy);
-
-                return true;
-            }
-
-            @Override
-            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                // Called when action mode is first created. The menu supplied
-                // will be used to generate action buttons for the action mode
-
-                // Here is an example MenuItem
-                menu.add(0, TRANSLATE, 0, "Definition").setIcon(R.drawable.ic_border_color_black_24dp);
-
-                return true;
-            }
-
-            @Override
-            public void onDestroyActionMode(ActionMode mode) {
-                // Called when an action mode is about to be exited and
-                // destroyed
-            }
-
-            @Override
-            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-                switch (item.getItemId()) {
-                    case TRANSLATE:
-                        int min = 0;
-                        int max = subjectiefText.getText().length();
-
-                        Button b = (Button)findViewById(R.id.editTextButton);
-                        EditText et = (EditText)findViewById(R.id.editSelectedText);
-                        RelativeLayout rl = (RelativeLayout) findViewById(R.id.overlay);
-                        ToggleButton tb = (ToggleButton)findViewById(R.id.speechToggleButton);
-
-                        if (subjectiefText.isFocused()) {
-                            final int selStart = subjectiefText.getSelectionStart();
-                            final int selEnd = subjectiefText.getSelectionEnd();
-
-                            min = Math.max(0, Math.min(selStart, selEnd));
-                            max = Math.max(0, Math.max(selStart, selEnd));
-
-                            b.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    EditText editedText = (EditText)findViewById(R.id.editSelectedText);
-                                    RelativeLayout rl = (RelativeLayout) findViewById(R.id.overlay);
-                                    ToggleButton tb = (ToggleButton)findViewById(R.id.speechToggleButton);
-
-                                    rl.setVisibility(View.INVISIBLE);
-                                    tb.setVisibility(View.VISIBLE);
-
-                                    editSelectedText(selStart, selEnd, editedText.getText().toString(), subjectiefText);
-                                }
-                            });
-
-                        }
-                        // Perform your definition lookup with the selected text
-
-
-
-                        rl.setVisibility(View.VISIBLE);
-                        tb.setVisibility(View.INVISIBLE);
-
-
-
-                        final CharSequence selectedText = subjectiefText.getText().subSequence(min, max);
-                        et.setText(selectedText);
-                        // Finish and close the ActionMode
-                        mode.finish();
-                        return true;
-                    default:
-                        break;
+            textView.setCustomSelectionActionModeCallback(new ActionMode_Callback() {
+                @Override
+                public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                    return doActionItemClicked(mode, item, finalView);
                 }
-                return false;
-            }
-
-        });
+            });
+        }
 
 
 
@@ -665,6 +592,59 @@ public class SpeechActivity extends Activity implements RecognitionListener {
         String ending = subject.getText().toString().substring(end, subject.getText().length());
         String newString = begin + newText + ending;
         subject.setText(newString);
+    }
+
+    public boolean doActionItemClicked(ActionMode mode, MenuItem item, final TextView tv) {
+        switch (item.getItemId()) {
+            case 1:
+                int min = 0;
+                int max = tv.getText().length();
+
+                Button b = (Button)findViewById(R.id.editTextButton);
+                EditText et = (EditText)findViewById(R.id.editSelectedText);
+                RelativeLayout rl = (RelativeLayout) findViewById(R.id.overlay);
+                ToggleButton tb = (ToggleButton)findViewById(R.id.speechToggleButton);
+
+                if (tv.isFocused()) {
+                    final int selStart = tv.getSelectionStart();
+                    final int selEnd = tv.getSelectionEnd();
+
+                    min = Math.max(0, Math.min(selStart, selEnd));
+                    max = Math.max(0, Math.max(selStart, selEnd));
+
+                    b.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            EditText editedText = (EditText)findViewById(R.id.editSelectedText);
+                            RelativeLayout rl = (RelativeLayout) findViewById(R.id.overlay);
+                            ToggleButton tb = (ToggleButton)findViewById(R.id.speechToggleButton);
+
+                            rl.setVisibility(View.INVISIBLE);
+                            tb.setVisibility(View.VISIBLE);
+
+                            editSelectedText(selStart, selEnd, editedText.getText().toString(), tv);
+                        }
+                    });
+
+                }
+                // Perform your definition lookup with the selected text
+
+
+
+                rl.setVisibility(View.VISIBLE);
+                tb.setVisibility(View.INVISIBLE);
+
+
+
+                final CharSequence selectedText = tv.getText().subSequence(min, max);
+                et.setText(selectedText);
+                // Finish and close the ActionMode
+                mode.finish();
+                return true;
+            default:
+                break;
+        }
+        return false;
     }
 
 
