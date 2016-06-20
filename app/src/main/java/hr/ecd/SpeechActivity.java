@@ -80,6 +80,7 @@ public class SpeechActivity extends Activity implements RecognitionListener {
 
     private boolean correctionIsActive = false;
     private boolean commandIsActive = false;
+    private String prevResult = "";
 
 
     @Override
@@ -342,12 +343,15 @@ public class SpeechActivity extends Activity implements RecognitionListener {
         Log.i("LENGTH",""+commandsLength);
         boolean doChangeSOEPStatus = true;
 
+        String[] commandsSplit = commands.split(" ");
+        int wordCount = commandsSplit.length;
+
         partialText = partialText.replaceAll(" commando", "");
         partialText = partialText.replaceAll("Commando", "");
         partialText = partialText.replaceAll("commando", "");
 
-        if(commands.length()>1) {
-            if (commands.contains("commando") || commands.contains("mando") || commands.contains("mondo") || commands.contains("cuando")){
+        if(commands.length()>1&&commandsLength!=prevResult.length()) {
+            if (commandsSplit[wordCount-1].equals("commando")|| commandsSplit[wordCount-1].equals("mando") || commandsSplit[wordCount-1].equals("mondo") || commandsSplit[wordCount-1].equals("cuando")){
                 commandIsActive = true;
                 if(!correctionIsActive)
                     changeSOEPStatus("Commando");
@@ -356,13 +360,12 @@ public class SpeechActivity extends Activity implements RecognitionListener {
 
             if (commandIsActive) {
                 commandIsActive = false;
-                String[] commandsSplit = commands.split(" ");
                 int index = commandsSplit.length;
                 String command = commandsSplit[index - 1];
                 if (!correctionIsActive) {
                     if (command.equals("subjectief")) {
                         SOEPStatus = SOEP.SUBJECTIEF;
-                    } else if (command.equals("objectief") || command.equals("objektiv") || command.equals("objektief")) {
+                    } else if (command.equals("objectief") || command.equals("objektiv") || command.equals("objektief") || command.equals("adjectief")) {
                         SOEPStatus = SOEP.OBJECTIEF;
                     } else if (command.equals("evaluatie")) {
                         SOEPStatus = SOEP.EVALUATIE;
@@ -371,10 +374,10 @@ public class SpeechActivity extends Activity implements RecognitionListener {
                     } else {
                         doChangeSOEPStatus = false;
                     }
-
                     if (doChangeSOEPStatus) {
                         changeSOEPStatus("Actief");
                         Log.i("SOEPStatus", SOEPStatus.toString());
+                        reset();
                     }
                 }
                 else
@@ -384,7 +387,7 @@ public class SpeechActivity extends Activity implements RecognitionListener {
                     if (command.equals("stop")) {
                         toggleButton.setChecked(false);
                         changeSOEPStatus("Actief");
-                    } else if (command.equals("correctie") || command.equals("correcties") || command.equals("collectie")) {
+                    } else if (command.equals("correctie") || command.equals("correcties")) {
                         Log.i("COMMANDO", "CORRECTIE");
                         correctionIsActive = !correctionIsActive;
 
@@ -396,6 +399,16 @@ public class SpeechActivity extends Activity implements RecognitionListener {
                     } else if (command.equals("wijzigen") || command.equals("wijzer") || command.equals("wijzig")) {
                         SOEPText.setText("- ");
                         changeSOEPStatus("Actief");
+                        getText();
+                        reset();
+                    } else if (command.equals("backspace")){
+                        String[] soepText = SOEPText.getText().toString().split(" ");
+                        soepText[soepText.length-1] = "";
+                        String newText = TextUtils.join(" ", soepText);
+                        SOEPText.setText(newText);
+                        changeSOEPStatus("Actief");
+                        getText();
+                        reset();
                     }
                     else
                         commandIsActive = true;
@@ -423,12 +436,11 @@ public class SpeechActivity extends Activity implements RecognitionListener {
             }
             if (correctionIsActive) {
                 Log.i("CORRECTIE","DELETE");
-                String[] commandsSplit = commands.split(" ");
-                String textToRemove = commandsSplit[commandsSplit.length - 1];
+                String textToRemove = commandsSplit[wordCount - 1];
                 String[] textSplit = SOEPText.getText().toString().toLowerCase().split(" ");
 
                 for (int i = textSplit.length - 1; i > -1; i--) {
-                    if (textSplit[i].contains(textToRemove)) {
+                    if (textSplit[i].equals(textToRemove)) {
                         textSplit[i] = "";
                         break;
                     }
@@ -437,15 +449,22 @@ public class SpeechActivity extends Activity implements RecognitionListener {
                 String newText = TextUtils.join(" ", textSplit);
                 SOEPText.setText(newText);
                 getText();
+                reset();
             }
             SOEPText.setText(replaceSymbols(SOEPText.getText().toString().replaceAll("\\s+", " ")));
         }
-
+        prevResult = commands;
     }
 
     public String replaceSymbols(String totalText){
         totalText = totalText.replaceAll(" punt",".").replaceAll(" vraagteken","?").replaceAll(" uitroepteken","!").replaceAll(" komma",",");
         return totalText;
+    }
+
+    public void reset(){
+        speech.cancel();
+        speech.destroy();
+        listen();
     }
 
     public void changeSOEPStatus(String status){
@@ -480,6 +499,7 @@ public class SpeechActivity extends Activity implements RecognitionListener {
         Log.i(LOG_TAG, "onReadyForSpeech");
         SOEPText.setText(SOEPText.getText()+" ");
         getText();
+        prevResult = "";
     }
 
     @Override
@@ -487,6 +507,7 @@ public class SpeechActivity extends Activity implements RecognitionListener {
         Log.i(LOG_TAG, "onResults: "+results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION).get(0));
         speech.destroy();
         listen();
+        onPartialResults(results);
     }
 
     public void getText(){
