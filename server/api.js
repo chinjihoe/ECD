@@ -30,6 +30,10 @@ server.listen(port, function(){
 server.get('/client/:id', Endpoint.getClient);
 server.get('/client/:id/activities', Endpoint.getActivity);
 server.get('/employee/:id', Endpoint.getEmployee);
+server.get('/employee/:id', Endpoint.getEmployee);
+server.get('/activity/:id', Endpoint.getActivity);
+server.get('/episodes/:id', Endpoint.getEpisodes);
+//server.get('/activities', Endpoint.getActivities);
 
 //Returns all admins
 server.get('/accounts/admin', Endpoint.getAdmins);

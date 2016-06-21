@@ -8,7 +8,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name="Ecd"
+        android:name=".Ecd"
         android:allowBackup="true"
         android:icon="@drawable/hp_icon"
         android:label="@string/app_name"
@@ -25,11 +25,12 @@
         </activity>
         <activity android:name=".MainActivity" />
         <activity android:name=".LoginActivity" />
-        <activity android:name=".DossierActivity"/>
-        <activity android:name=".SpeechActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".DossierActivity" />
+        <activity
+            android:name=".SpeechActivity"
+            android:screenOrientation="portrait" />
         <activity android:name=".NFCActivity" />
+        <activity android:name=".GuessActivity"></activity>
     </application>
-
-
 
 </manifest>

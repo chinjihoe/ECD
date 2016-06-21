@@ -34,10 +34,10 @@ public class NFCActivity extends AppCompatActivity {
         }
 
         if(((Ecd)this.getApplication()).getDebugging()) {
-            Integer userId = 1;
+            Integer userId = 70;
             Intent intent = new Intent(this, DossierActivity.class);
             intent.putExtra("userId", userId.toString());
-
+            ((Ecd)this.getApplication()).setClientId(userId);
             startActivityForResult(intent, 1);
         }
 
@@ -70,6 +70,7 @@ public class NFCActivity extends AppCompatActivity {
                 Integer userId = Integer.parseInt(text);
                 Intent intent = new Intent(this, DossierActivity.class);
                 intent.putExtra("userId", userId.toString());
+                ((Ecd)this.getApplication()).setClientId(userId);
 
                 startActivityForResult(intent, 1);
             }

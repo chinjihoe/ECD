@@ -10,7 +10,8 @@ import org.json.JSONObject;
 public class Ecd extends Application{
     private boolean debugging = false;
     private String[] speechText;
-    private int accountId = 0;
+    private int accountId = 1;
+    private int clientId = 70;
     private JSONObject employeeJSON;
 
 
@@ -26,6 +27,9 @@ public class Ecd extends Application{
 
     public void setAccountId(int accountId){this.accountId = accountId;}
     public int getAccountId(){return accountId;}
+
+    public void setClientId(int clientId){this.clientId = clientId;}
+    public int getClientId(){return clientId;}
 
     public void setEmployeeJSON(JSONObject JSON){this.employeeJSON = JSON;}
     public JSONObject getEmployeeJSON(){return this.employeeJSON;}

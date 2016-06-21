@@ -4,9 +4,10 @@ var dateFormat = require('dateformat');
 var getConnection = function () {
 	return mysql.createConnection({
 		host : 'localhost',
-		user : 'root',
-		password : 'careniet',
-		database : 'mydb'
+		user : 'emerging',
+		password : 'rnpxt45n',
+		database : 'mydb',
+		port : 3306
 	});
 };
 
@@ -43,7 +44,8 @@ module.exports = {
 					'martial' : rows[0].martial,
 					'weight' : rows[0].weight,
 					'detail' : rows[0].detail,
-					'sex' : rows[0].sex
+					'sex' : rows[0].sex,
+					'extra' : rows[0].extra
 				}))
 			res.end();
 		});
@@ -104,36 +106,69 @@ module.exports = {
 				res.end();
 			}
 		});
-		db.query('SELECT * FROM activities WHERE client_id = ? ORDER BY id DESC;', [req.params.id], function (err, rows, fields) {
+		db.query('SELECT * FROM activities WHERE client_id = ? ORDER BY id DESC;', [req.params.id], function (err, results) {
 			if (err) {
 				errorReceived(500, err, res);
 			}
-			ids = Array()
-				for (row in rows) {
-					ids[row] = rows[row];
-				}
-				res.write(
-					JSON.stringify({
-						activities : ids
-					}))
+			res.write(
+				JSON.stringify({activities : results}))
+			res.end();
+		});
+		db.end();
+	},
+    
+    getEpisodes : function (req, res, next) {
+		var db = getConnection();
+		console.log('getEpisodes aangeroepen');
+		if (!req.params.id) {
+			errorReceived(170, "id parameter cannot be null", res);
+			res.end();
+		}
+		db.query('SELECT COUNT(*) as id from episodes WHERE client_id =?', [req.params.id], function (err, rows, fields) {
+			if (err) {
+				errorReceived(500, err, res);
+			}
+			if (rows[0].id == 0) {
+				errorReceived(171, "The record with the specified id(s) does not exist", res);
 				res.end();
+			}
+		});
+		db.query('SELECT * FROM episodes WHERE client_id = ?', [req.params.id], function (err, results) {
+			if (err) {
+				errorReceived(500, err, res);
+			}
+			res.write(JSON.stringify({episodes : results}));
+			res.end();
 		});
 		db.end();
 	},
 
+	/*getActivities : function (req, res, next) {
+		var db = getConnection();
+
+		db.query({
+			sql : 'SELECT id, account_id, client_id, subjective, objective, evaluation, plan, date FROM activities',
+			nestTables : true
+		}, function (err, results) {
+			res.write(JSON.stringify(results));
+			res.end();
+		});
+		db.end();
+	},*/
+
 	getAdmins : function (req, res, next) {
 		var db = getConnection();
 		console.log('getAdmins aangeroepen');
-		db.query('SELECT id FROM accounts WHERE isAdmin = TRUE', function (err, rows, fields) {
+		db.query('SELECT id FROM accounts WHERE isAdmin = TRUE', function (err, results) {
 			if (err) {
 				errorReceived(500, err, res);
 			}
-			ids = Array()
+/*			ids = Array()
 				for (row in rows) {
 					ids[row] = rows[row]['id']
-				}
+				}*/
 				res.write(JSON.stringify({
-						admins : ids
+						admins : results
 					}))
 				res.end();
 		});
@@ -148,7 +183,7 @@ module.exports = {
 			if (err) {
 				errorReceived(500, err, res);
 			}
-			console.log(rows);
+			console.log(err);
 
 			if (rows.length > 0) {
 				res.write(JSON.stringify({
@@ -192,10 +227,10 @@ module.exports = {
 				errorReceived(500, err, res);
 			} else {
 				res.write(
-				JSON.stringify({
-					'success' : true
-				}));
-			res.end();
+					JSON.stringify({
+						'success' : true
+					}));
+				res.end();
 			}
 		});
 		db.end();
@@ -219,10 +254,10 @@ module.exports = {
 				errorReceived(500, err, res);
 			} else {
 				res.write(
-				JSON.stringify({
-					'success' : true
-				}));
-			res.end();
+					JSON.stringify({
+						'success' : true
+					}));
+				res.end();
 			}
 		});
 		db.end();

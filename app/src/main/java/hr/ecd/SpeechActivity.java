@@ -25,6 +25,11 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 import android.media.AudioManager;
 
+import com.android.volley.Response;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class SpeechActivity extends Activity implements RecognitionListener {
     private Toolbar toolbar;
     private TextView returnedText;
@@ -103,11 +108,7 @@ public class SpeechActivity extends Activity implements RecognitionListener {
                     progressBar.setVisibility(View.INVISIBLE);
                     speech.stopListening();
                     speech.destroy();
-                    allText[0] = subjectiefText.getText().toString();
-                    allText[1] = objectiefText.getText().toString();
-                    allText[2] = evaluatieText.getText().toString();
-                    allText[3] = planText.getText().toString();
-                    setSpeechText(allText);
+
                 }
             }
         });
@@ -162,6 +163,7 @@ public class SpeechActivity extends Activity implements RecognitionListener {
     }
 
     public void alertDialog(){
+        toggleButton.setChecked(false);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Afronden?");
 
@@ -170,17 +172,68 @@ public class SpeechActivity extends Activity implements RecognitionListener {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
+                toggleButton.setChecked(true);
             }
         });
         builder.setNegativeButton("Ja", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                toggleButton.setChecked(false);
+                addActivity();
                 dialog.cancel();
                 finish();
+
             }
         });
         builder.show();
+    }
+
+    public void addActivity(){
+        allText[0] = subjectiefText.getText().toString();
+        allText[1] = objectiefText.getText().toString();
+        allText[2] = evaluatieText.getText().toString();
+        allText[3] = planText.getText().toString();
+        ((Ecd)this.getApplication()).setSpeechText(allText);
+        for(String s:allText){
+            Log.i("speechText",s);
+        }
+        try{
+            JSONObject jsonBody = new JSONObject();
+            jsonBody.put("account_id", ((Ecd)this.getApplication()).getAccountId());
+            jsonBody.put("client_id", ((Ecd)this.getApplication()).getClientId());
+            jsonBody.put("subjective",allText[0]);
+            jsonBody.put("objective",allText[1]);
+            jsonBody.put("evaluation",allText[2]);
+            jsonBody.put("plan",allText[3]);
+
+            Api api = new Api();
+            api.request(this, "/addactivity", jsonBody, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    try{
+                        if(!response.isNull("code")) {
+                            Integer errorCode = response.getInt("code");
+                            switch (Api.Errors.fromInteger(errorCode)) {
+                                case USER_NOT_FOUND:
+                                    break;
+                                case NO_RECORDS_FOUND:
+                                    break;
+                                case ERROR_NOT_FOUND:
+                                    break;
+                                case FOUR_O_FOUR:
+                                    break;
+                            }
+                        }
+
+                    }
+                    catch (JSONException e){
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -402,10 +455,5 @@ public class SpeechActivity extends Activity implements RecognitionListener {
         return message;
     }
 
-    public void setSpeechText(String[] speechText){
-        ((Ecd)this.getApplication()).setSpeechText(speechText);
-        for(String s:allText){
-            Log.i("speechText",s);
-        }
-    }
+
 }

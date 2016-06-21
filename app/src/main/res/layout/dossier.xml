@@ -44,34 +44,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="Attentie"
-                    android:id="@+id/attentieKopText"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:singleLine="true"
-                    android:textColor="@color/Black"
-                    android:textSize="20dp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:id="@+id/attentieText"
-                    android:layout_below="@+id/attentieKopText"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true" />
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/attentieText"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="false"
-                    android:layout_marginTop="15dp"
                     android:id="@+id/relativeLayout">
 
                     <TextView
@@ -178,15 +157,44 @@
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true" />
                 </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="false"
+                    android:layout_marginTop="15dp"
+                    android:layout_below="@+id/relativeLayout"
+                    android:id="@+id/relativeLayout2">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="Extra informatie"
+                        android:id="@+id/extraInformatieKopText"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:singleLine="true"
+                        android:textColor="@color/Black"
+                        android:textSize="20dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:id="@+id/extraInformatieText"
+                        android:layout_below="@+id/extraInformatieKopText"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true" />
+                </RelativeLayout>
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
-                    android:layout_below="@+id/relativeLayout"
+                    android:layout_below="@+id/relativeLayout2"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:id="@+id/relativeLayout2">
+                    android:id="@+id/relativeLayout3">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -213,11 +221,11 @@
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/relativeLayout2"
+                    android:layout_below="@+id/relativeLayout3"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:layout_marginTop="15dp"
-                    android:id="@+id/relativeLayout3">
+                    android:id="@+id/relativeLayout4">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -247,7 +255,7 @@
                     android:layout_height="wrap_content"
                     android:text="Nieuw journaal"
                     android:id="@+id/nieuwJournaal"
-                    android:layout_below="@+id/relativeLayout2"
+                    android:layout_below="@+id/relativeLayout3"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true" />
 
