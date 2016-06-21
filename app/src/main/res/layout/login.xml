@@ -30,7 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Username"
+            android:text="Gebruikersnaam"
             android:id="@+id/usernametextfield"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="10dp"/>
@@ -41,14 +41,14 @@
             android:id="@+id/usernameInputText"
             android:inputType="textEmailAddress"
             android:layout_gravity="center_horizontal"
-            android:hint="Fill in your username!"
+            android:hint="Vul uw gebruikersnaam in!"
             android:maxLines="1"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Password"
+            android:text="Wachtwoord"
             android:id="@+id/passwordField"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="10dp"/>
@@ -60,20 +60,20 @@
             android:ems="10"
             android:id="@+id/passwordInputText"
             android:layout_gravity="center_horizontal"
-            android:hint="Fill in your password!"/>
+            android:hint="Vul uw wachtwoord in!"/>
 
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="20dp">
 
-            <Button
+            <!--<Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Skip"
                 android:id="@+id/skipButton"
                 android:layout_gravity="center_horizontal"
-                android:layout_weight="0.05" />
+                android:layout_weight="0.05" />-->
 
             <Button
                 android:layout_width="wrap_content"

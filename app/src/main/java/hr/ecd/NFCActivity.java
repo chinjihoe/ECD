@@ -33,13 +33,13 @@ public class NFCActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        if(((Ecd)this.getApplication()).getDebugging()) {
+        /*if(((Ecd)this.getApplication()).getDebugging()) {
             Integer userId = 70;
             Intent intent = new Intent(this, DossierActivity.class);
             intent.putExtra("userId", userId.toString());
             ((Ecd)this.getApplication()).setClientId(userId);
             startActivityForResult(intent, 1);
-        }
+        }*/
 
         mNfcAdapter = (NfcAdapter) NfcAdapter.getDefaultAdapter(this);
     }

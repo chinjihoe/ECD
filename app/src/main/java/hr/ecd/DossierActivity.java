@@ -63,7 +63,6 @@ public class DossierActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-
         mDrawerList = (ListView)findViewById(R.id.navList);
 
         addDrawerItems();
@@ -75,7 +74,7 @@ public class DossierActivity extends AppCompatActivity {
         progressDialog = new ProgressDialog(this);
         progressDialog.setProgress(ProgressDialog.STYLE_HORIZONTAL);
         progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Doe normaal man");
+        progressDialog.setMessage("Gegevens aan het ophalen");
         progressDialog.show();
 
         nieuwJournaalButton = (Button) findViewById(R.id.nieuwJournaal);
@@ -92,7 +91,6 @@ public class DossierActivity extends AppCompatActivity {
 
         updateRecentJournal();
         getClientData();
-
     }
 
     private void getClientData() {
@@ -102,6 +100,14 @@ public class DossierActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(JSONObject response) {
                     fillClientData(response);
+                    progressDialog.hide();
+                    progressDialog.dismiss();
+                }
+            });
+            api.request(this, "/episodes/" + this.userId, null, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    fillEpisodesData(response);
                 }
             });
         }
@@ -111,12 +117,11 @@ public class DossierActivity extends AppCompatActivity {
     }
 
     private void fillClientData(JSONObject response) {
-
         TextView voornaamText = (TextView)findViewById(R.id.voornaamText),
                 achternaamText = (TextView)findViewById(R.id.achternaamText),
                 geboorteDatumText = (TextView)findViewById(R.id.geboortedatumText),
                 kamerText = (TextView)findViewById(R.id.kamernrText),
-                attentieText = (TextView)findViewById(R.id.extraInformatieText),
+                extraInformatieText = (TextView)findViewById(R.id.extraInformatieText),
                 telefoonNummerText = (TextView)findViewById(R.id.telnrText),
                 emailText = (TextView)findViewById(R.id.emailText),
                 burgerlijkestaatText = (TextView)findViewById(R.id.burgelijkestaatText),
@@ -125,7 +130,6 @@ public class DossierActivity extends AppCompatActivity {
                 leeftijdText = (TextView)findViewById(R.id.leeftijdText);
 
         try {
-
             voornaamText.append(response.getString("name"));
             achternaamText.append(response.getString("surname"));
             geboorteDatumText.append(response.getString("birthdate"));
@@ -137,16 +141,30 @@ public class DossierActivity extends AppCompatActivity {
             geslachtText.append((response.getString("sex").equals("1")) ? "Man" : "Vrouw");
             String[] age = response.getString("birthdate").split("-");
             leeftijdText.append("" + getAge(Integer.parseInt(age[0]),Integer.parseInt(age[1]), 1));
-
-            if(!response.isNull("detail"))
-                attentieText.setText(response.getString("detail"));
-
+            extraInformatieText.setText(response.getString("extra"));
         }
         catch(JSONException e) {
             e.printStackTrace();
         }
     }
+    private void fillEpisodesData(JSONObject response){
+        try{
+            TextView episodesText = (TextView) findViewById(R.id.actueleEpisodeText);
+            JSONArray episodes = response.getJSONArray("episodes");
+            int episodesAmount = episodes.length();
+            for(int i=0;i<episodesAmount;i++){
+                if(i!=episodesAmount-1)
+                    episodesText.append(episodes.getJSONObject(i).getString("name")+"\n");
+                else
+                    episodesText.append(episodes.getJSONObject(i).getString("name"));
+            }
 
+        }
+        catch (JSONException e){
+            e.printStackTrace();
+        }
+
+    }
     public int getAge (int _year, int _month, int _day) {
         GregorianCalendar cal = new GregorianCalendar();
         int y, m, d, a;
@@ -186,7 +204,7 @@ public class DossierActivity extends AppCompatActivity {
     }
 
     private void addDrawerItems() {
-        String[] osArray = { "Record activities", "Relevant information" };
+        String[] osArray = { "Nieuw journaal", "Relevante informatie" };
         mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, osArray);
         mDrawerList.setAdapter(mAdapter);
     }
@@ -208,7 +226,11 @@ public class DossierActivity extends AppCompatActivity {
             /** Called when a drawer has settled in a completely closed state. */
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
-                getSupportActionBar().setTitle(mActivityTitle);
+                try {
+                    getSupportActionBar().setTitle(((Ecd)getApplication()).getEmployeeJSON().getString("name"));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
         };
@@ -233,11 +255,15 @@ public class DossierActivity extends AppCompatActivity {
                 String plan = row.getString("plan");
                 String date = row.getString("date");
 
-                journal.append("S:" + " " + subjective + "\n" +
+                String dateFormatted = date.split("T")[0];
+                String fullTime = (date.split("T")[1]);
+                String time = fullTime.split("\\.")[0];
+
+                journal.append("S: " + " " + subjective + "\n" +
                         "O: " + " " + objective + "\n" +
                         "E: " + " " + evaluation + "\n" +
                         "P: " + " " + plan + "\n" +
-                        date + " :employee" + accountId);
+                        dateFormatted + " " + time + " :employee" + accountId);
                 journal.append("\n\n");
 
                 Api api = new Api();
@@ -266,7 +292,6 @@ public class DossierActivity extends AppCompatActivity {
         catch(JSONException e) {
             e.printStackTrace();
         }
-
     }
 
     private void updateRecentJournal() {
@@ -335,8 +360,7 @@ public class DossierActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
-        progressDialog.hide();
-        progressDialog.dismiss();
+
         super.onStart();
     }
 
