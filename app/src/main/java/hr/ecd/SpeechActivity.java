@@ -133,6 +133,8 @@ public class SpeechActivity extends Activity implements RecognitionListener {
                     previous = 3;
                 SOEPStatus = SOEP.values()[previous];
                 changeSOEPStatus("Actief");
+                commandIsActive = false;
+                correctionIsActive = false;
             }
         });
         volgendeButton.setOnClickListener(new View.OnClickListener(){
@@ -143,6 +145,8 @@ public class SpeechActivity extends Activity implements RecognitionListener {
                     next = 0;
                 SOEPStatus = SOEP.values()[next];
                 changeSOEPStatus("Actief");
+                commandIsActive = false;
+                correctionIsActive = false;
             }
         });
         afrondenButton.setOnClickListener(new View.OnClickListener(){
@@ -350,7 +354,9 @@ public class SpeechActivity extends Activity implements RecognitionListener {
         partialText = partialText.replaceAll("Commando", "");
         partialText = partialText.replaceAll("commando", "");
 
-        int beginIndex = wordCount - prevResult.split(" ").length;
+
+
+        int beginIndex = prevResult.split(" ").length;
         if(prevResult.equals(""))
             beginIndex=0;
         if(prevResult.length()>commandsLength)
@@ -406,6 +412,7 @@ public class SpeechActivity extends Activity implements RecognitionListener {
                             changeSOEPStatus("Actief");
                             Log.i("SOEPStatus", SOEPStatus.toString());
                             reset();
+                            break;
                         }
                     } else
                         doChangeSOEPStatus = false;
