@@ -204,7 +204,7 @@ public class DossierActivity extends AppCompatActivity {
     }
 
     private void addDrawerItems() {
-        String[] osArray = { "Record activities", "Relevant information" };
+        String[] osArray = { "Nieuw journaal", "Relevante informatie" };
         mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, osArray);
         mDrawerList.setAdapter(mAdapter);
     }
@@ -226,7 +226,11 @@ public class DossierActivity extends AppCompatActivity {
             /** Called when a drawer has settled in a completely closed state. */
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
-                getSupportActionBar().setTitle(mActivityTitle);
+                try {
+                    getSupportActionBar().setTitle(((Ecd)getApplication()).getEmployeeJSON().getString("name"));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
         };

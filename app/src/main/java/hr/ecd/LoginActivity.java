@@ -62,13 +62,13 @@ public class LoginActivity extends AppCompatActivity{
             }
         });
 
-        final Button skipButton = (Button) findViewById(R.id.skipButton); //Deze button skipt het login process om te kunnen werken aan de rest
+        /*final Button skipButton = (Button) findViewById(R.id.skipButton); //Deze button skipt het login process om te kunnen werken aan de rest
         skipButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(LoginActivity.this, NFCActivity.class)); //gaat naar nfc screen die dan naar speech screen gaat
             }
-        });
+        });*/
     }
 
     private void loginRequest(String username, String password){

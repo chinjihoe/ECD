@@ -317,9 +317,10 @@ public class SpeechActivity extends Activity implements RecognitionListener {
         Log.d(LOG_TAG, "FAILED " + errorMessage);
         switch(errorCode) {
             case SpeechRecognizer.ERROR_SPEECH_TIMEOUT:
+                reset();
+                break;
             case SpeechRecognizer.ERROR_NO_MATCH:
-                speech.destroy();
-                listen();
+                reset();
                 break;
         }
     }
@@ -359,7 +360,7 @@ public class SpeechActivity extends Activity implements RecognitionListener {
         Log.i("beginindex: ",""+beginIndex);
 
 
-        if (commands.length() > 1 && commandsLength != prevResult.length()) {
+        if (commands.length() > 1 && commandsLength != prevResult.length()&&beginIndex>-1) {
             //OLD CODE IF NEW CODE FAILS. DO NOT DELETE
             //int index = commandsSplit.length;
             //String command = commandsSplit[index - 1];
