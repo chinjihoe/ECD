@@ -17,6 +17,13 @@ import org.json.JSONException;
 
 import java.io.UnsupportedEncodingException;
 
+/**
+ * Na het inloggen kan de gebruiker een NFC chip scannen
+ * Het ophalen van informatie van de chip gebeurd hier
+ * Op de NFC chip staat een id van een client
+ * Na het uitlezen van het id zal de app het dossier openen van dit id(client)
+ */
+
 public class NFCActivity extends AppCompatActivity {
 
     private NfcAdapter mNfcAdapter;
@@ -27,27 +34,19 @@ public class NFCActivity extends AppCompatActivity {
         setContentView(R.layout.activity_nfc);
         Toolbar toolbar=(Toolbar)findViewById(R.id.toolbar);
 
+        //Actionbar title veranderen naar gebruikersnaam
         try {
             toolbar.setTitle(((Ecd) this.getApplication()).getEmployeeJSON().getString("name"));
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        /*if(((Ecd)this.getApplication()).getDebugging()) {
-            Integer userId = 70;
-            Intent intent = new Intent(this, DossierActivity.class);
-            intent.putExtra("userId", userId.toString());
-            ((Ecd)this.getApplication()).setClientId(userId);
-            startActivityForResult(intent, 1);
-        }*/
-
         mNfcAdapter = (NfcAdapter) NfcAdapter.getDefaultAdapter(this);
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
-        //Toast.makeText(this, "NFC intent!", Toast.LENGTH_LONG).show();
-
+        //get info of NFC chip
         if (intent.hasExtra(mNfcAdapter.EXTRA_TAG)) {
             Parcelable[] parcelables = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
             if(parcelables != null && parcelables.length > 0) {
@@ -61,6 +60,7 @@ public class NFCActivity extends AppCompatActivity {
         super.onNewIntent(intent);
     }
 
+    //start dossierActivity
     protected void readTextFromTag(NdefMessage message) {
         NdefRecord[] ndefRecords = message.getRecords();
         if(ndefRecords != null && ndefRecords.length > 0 ) {

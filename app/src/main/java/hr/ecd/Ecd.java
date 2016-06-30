@@ -5,20 +5,13 @@ import android.app.Application;
 import org.json.JSONObject;
 
 /**
- * Created by niekeichner on 31/05/16.
+ * Used to set and get Global variables
  */
 public class Ecd extends Application{
-    private boolean debugging = false;
     private String[] speechText;
     private int accountId = 1;
     private int clientId = 70;
     private JSONObject employeeJSON;
-
-
-    public void setDebugging(boolean debugging) {this.debugging = debugging;}
-    public boolean getDebugging() {
-        return debugging;
-    }
 
     public void setSpeechText(String[] speechText){this.speechText = speechText;}
     public String[] getSpeechText(){

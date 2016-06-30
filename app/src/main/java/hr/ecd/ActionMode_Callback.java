@@ -13,7 +13,7 @@ import android.widget.ToggleButton;
 import hr.ecd.R;
 
 /**
- * Created by niekeichner on 20/06/16.
+ * Callback van het contect menu als je text wilt editen
  */
 public class ActionMode_Callback implements ActionMode.Callback {
 

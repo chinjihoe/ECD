@@ -17,12 +17,12 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 /**
- * Created by niekeichner on 07/06/16.
+ * Hiermee maak je requests naar de server
  */
 
 
 public class Api {
-
+    //Error handling als er een error code word gestuurd door de server
     public enum Errors {
         USER_NOT_FOUND,
         NO_RECORDS_FOUND,
@@ -48,8 +48,7 @@ public class Api {
 
     }
 
-    private final String rootUrl = "http://80.57.4.176:523";
-
+    private final String rootUrl = "http://80.57.4.176:523"; //URL van de server
 
     public void request(Context context, String apiUrl, JSONObject jsonBody, final Response.Listener<JSONObject> callback) throws JSONException {
         JsonObjectRequest jsonReq = new JsonObjectRequest(rootUrl + apiUrl, jsonBody,

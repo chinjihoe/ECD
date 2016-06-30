@@ -30,6 +30,11 @@ import com.android.volley.Response;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ *  Hierin word alles van speech geregeld
+ *
+ */
+
 public class SpeechActivity extends Activity implements RecognitionListener {
     private static final int TRANSLATE = 1;
     private Toolbar toolbar;
@@ -163,7 +168,7 @@ public class SpeechActivity extends Activity implements RecognitionListener {
         });
         SOEPStatus = SOEP.SUBJECTIEF;
 
-        correction();
+        textCorrection();
 
     }
 
@@ -354,8 +359,7 @@ public class SpeechActivity extends Activity implements RecognitionListener {
         partialText = partialText.replaceAll("Commando", "");
         partialText = partialText.replaceAll("commando", "");
 
-
-
+        //bereken index van eerst volgende "nieuwe" woorden
         int beginIndex = prevResult.split(" ").length;
         if(prevResult.equals(""))
             beginIndex=0;
@@ -367,9 +371,7 @@ public class SpeechActivity extends Activity implements RecognitionListener {
 
 
         if (commands.length() > 1 && commandsLength != prevResult.length()&&beginIndex>-1) {
-            //OLD CODE IF NEW CODE FAILS. DO NOT DELETE
-            //int index = commandsSplit.length;
-            //String command = commandsSplit[index - 1];
+
             for (int i = beginIndex; i < wordCount; i++) {
                 String command = commandsSplit[i];
                 Log.i("COMMAND: ", command);
@@ -471,22 +473,7 @@ public class SpeechActivity extends Activity implements RecognitionListener {
                 }
                 if (correctionIsActive) {
                     Log.i("CORRECTIE", "DELETE");
-                    /*int wordsToRemove = wordCount - prevResult.split(" ").length;
-                    String[] textSplit = SOEPText.getText().toString().toLowerCase().split(" ");
-                    int beginIndex = wordCount - wordsToRemove - 1;
 
-                    for (int i = beginIndex; i < wordCount; i++) {
-                        //String textToRemove = commandsSplit[wordCount - 1];
-                        String textToRemove = commandsSplit[i];
-                        Log.i("CORRECTIE", "REMOVE: " + textToRemove);
-
-                        for (int j = textSplit.length - 1; j > -1; j--) {
-                            if (textSplit[j].equals(textToRemove)) {
-                                textSplit[j] = "";
-                                break;
-                            }
-                        }
-                    }****DO NOT DELETE THIS PLS*****/
                     String[] textSplit = SOEPText.getText().toString().toLowerCase().split(" ");
                     String textToRemove = command;
                     Log.i("CORRECTIE", "REMOVE: " + textToRemove);
@@ -561,7 +548,7 @@ public class SpeechActivity extends Activity implements RecognitionListener {
         listen();
         onPartialResults(results);
     }
-
+    //pakt volledige text van de SOEPText en slaat dit op
     public void getText(){
         switch (SOEPStatus){
             case SUBJECTIEF:
@@ -623,8 +610,8 @@ public class SpeechActivity extends Activity implements RecognitionListener {
         return message;
     }
 
-    protected void correction(){
-
+    //modify text by keyboard after longpress on the text
+    protected void textCorrection(){
         TextView textViews[] = new TextView[4];
         textViews[0] = (TextView)findViewById(R.id.subjectiefText);
         textViews[1] = (TextView)findViewById(R.id.objectiefText);
@@ -645,8 +632,6 @@ public class SpeechActivity extends Activity implements RecognitionListener {
                 }
             });
         }
-
-
 
     }
 
@@ -692,8 +677,6 @@ public class SpeechActivity extends Activity implements RecognitionListener {
 
                 }
                 // Perform your definition lookup with the selected text
-
-
 
                 rl.setVisibility(View.VISIBLE);
                 tb.setVisibility(View.INVISIBLE);

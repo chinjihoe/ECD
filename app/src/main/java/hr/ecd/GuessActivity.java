@@ -15,6 +15,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ *Zoekt de meest relevante woorden van de laatste episode, die worden nu gesorteerd n in wordWorth array gezet.
+ */
+
 public class GuessActivity extends AppCompatActivity {
 
     public static <K, V extends Comparable<? super V>> Map<K, V>

@@ -33,7 +33,9 @@ import java.util.GregorianCalendar;
 import java.util.concurrent.BlockingQueue;
 
 /**
- * Het clienten dossier
+ * Het clienten dossier (ECD)
+ * Na het scannen van een NFC chip opent DossierActivity
+ * Hierin word alle informatie van het cliënt opgehaald en in de textviews gezet
  */
 public class DossierActivity extends AppCompatActivity {
 
@@ -57,6 +59,7 @@ public class DossierActivity extends AppCompatActivity {
         Toolbar toolbar=(Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        //Actionbar title veranderen naar gebruikersnaam
         try {
             getSupportActionBar().setTitle(((Ecd) this.getApplication()).getEmployeeJSON().getString("name"));
         } catch (Exception e) {
@@ -332,11 +335,7 @@ public class DossierActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
